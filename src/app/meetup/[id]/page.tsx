@@ -166,7 +166,7 @@ export default function MeetupDetailPage() {
 
   const pageSize = 6 // 페이지 당 아이템 수
   const path = usePathname()
-  const meetupId = path.split('/').pop()
+  const meetupId = path.split('/').pop() || ''
   const { toast } = useToast()
 
   const handlePageChange = async (newPage: number) => {

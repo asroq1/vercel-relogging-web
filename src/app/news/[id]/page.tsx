@@ -96,7 +96,7 @@ const EventDetailSection = ({
           <div>
             <Button
               asChild
-              className="hover:bg-hoverGray w-full border bg-background text-textLight"
+              className="w-full border bg-background text-textLight hover:bg-hoverGray"
             >
               <Link
                 href={`${newsDetail?.source}`}
@@ -170,7 +170,7 @@ export default function NewsArticlePage() {
   } = useNewsQueries({
     currentPage,
     pageSize,
-    articleId,
+    articleId: articleId ?? '',
   })
   const onChangeEventDetail = (type: 'prev' | 'next') => {
     if (!newsDetail?.id) return

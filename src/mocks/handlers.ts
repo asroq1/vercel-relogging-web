@@ -66,7 +66,7 @@ export const handlers = [
     return HttpResponse.json(article)
   }),
 
-  http.get('/api/newsArticles/:id/prev', ({ params }) => {
+  http.get('/api/newsArticles/:id/prev', () => {
     const article = createNewsArticle()
     article.id = faker.number.int({ min: 1, max: 1000 })
 
@@ -209,9 +209,7 @@ const createPageable = (pageNumber: number, pageSize: number) => ({
 const createPloggingEventDetail = (id: number) => {
   // 이미지 리스트 생성 (3-5개의 랜덤한 이미지)
   const imageCount = faker.number.int({ min: 3, max: 5 })
-  const imageList = Array.from({ length: imageCount }, (_, index) =>
-    createImage(),
-  )
+  const imageList = Array.from({ length: imageCount }, (_) => createImage())
 
   // 시작일과 종료일 생성 (시작일이 종료일보다 앞에 오도록)
   const startDate = faker.date.future()
