@@ -125,6 +125,45 @@ export const handlers = [
 
     return HttpResponse.json(eventDetail)
   }),
+
+  // 플로깅 밋업 mock logic
+  http.get('/api/ploggingMeetups/list', async ({ request }) => {
+    //  TODO: 5초 대기 지우기
+    console.log('프론트 요청', request)
+    // await delay(3000)
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') || '0')
+    const size = parseInt(url.searchParams.get('size') || '10')
+
+    const totalElements = 100 // 전체 아이템 수
+    const totalPages = Math.ceil(totalElements / size)
+    const currentElements =
+      page === totalPages - 1 ? totalElements % size : size
+
+    // 현재 페이지에 해당하는 이벤트 목록 생성
+    const content = Array.from({ length: currentElements }, createPloggingEvent)
+
+    return HttpResponse.json({
+      totalPages,
+      totalElements,
+      size,
+      content,
+      number: page,
+      sort: createSort(),
+      numberOfElements: content.length,
+      pageable: createPageable(page, size),
+      first: page === 0,
+      last: page === totalPages - 1,
+      empty: content.length === 0,
+    })
+  }),
+  // 플로깅 이벤트 상세 조회
+  http.get('/api/ploggingMeetups/:id', ({ params }) => {
+    const eventId = parseInt(params.id as string)
+    const eventDetail = createPloggingEventDetail(eventId)
+
+    return HttpResponse.json(eventDetail)
+  }),
 ]
 
 // 지자체 행사 mock logic

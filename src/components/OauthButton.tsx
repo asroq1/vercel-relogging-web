@@ -2,17 +2,17 @@
 
 import GoogleIcon from '@/assets/icon_google.svg'
 import KakaoIcon from '@/assets/icon_kakao.svg'
+import Link from 'next/link'
 
 type OauthTypeProps = 'google' | 'kakao'
 
 interface IOauthType {
   oauthType: OauthTypeProps
   className?: string
+  authUrl: string
 }
 
-const OauthButton = ({ oauthType, className }: IOauthType) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-
+const OauthButton = ({ oauthType, className, authUrl }: IOauthType) => {
   const providerConfig = {
     google: {
       icon: <GoogleIcon />,
@@ -24,23 +24,17 @@ const OauthButton = ({ oauthType, className }: IOauthType) => {
     },
   }
 
-  // const handleLogin = () => {
-  //   signIn(provider, {
-  //     callbackUrl: '/oauth/success',
-  //   })
-  // }
-  const onOauthLoginHandler = () => {
-    window.location.href = `${baseUrl}/oauth2/authorization/${oauthType}`
-  }
   return (
     <>
-      <button
-        onClick={onOauthLoginHandler}
-        className={`flex w-full items-center justify-center gap-2 rounded-md bg-background p-3 shadow-md hover:shadow-lg active:translate-y-0.5 active:shadow-sm desktop:max-h-[48px] ${className}`}
+      <Link
+        href={authUrl}
+        className={`hover:bg-hoverGray flex w-full max-w-[400px] items-center justify-center gap-2 rounded-md bg-background p-3 active:translate-y-0.5 active:shadow-sm laptop:max-h-[48px] ${className}`}
       >
         {providerConfig[oauthType].icon}
-        <span className="text-sm">{providerConfig[oauthType].text}</span>
-      </button>
+        <span className="text-sm font-normal">
+          {providerConfig[oauthType].text}
+        </span>
+      </Link>
     </>
   )
 }

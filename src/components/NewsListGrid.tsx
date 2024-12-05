@@ -13,6 +13,8 @@ export default function NewsListGrid() {
     useNewsQueries({ currentPage, pageSize })
 
   const handlePageChange = async (newPage: number) => {
+    if (newPage < 0) return
+    if (newsList?.totalPage && newPage >= newsList.totalPage) return
     setCurrentPage(newPage)
   }
 

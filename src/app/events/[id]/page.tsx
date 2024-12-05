@@ -2,7 +2,6 @@
 
 import HomeButton from '@/components/HomeButton'
 import { Button } from '@/components/ui/button'
-import { MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -11,6 +10,51 @@ import LabeledContent from '@/components/LabeledContent'
 import { ErrorAlert } from '@/components/status/ErrorAlert'
 import { LoadingSkeleton } from '@/components/status/LoadingSkeleton'
 import ContentList from '@/components/ContentList'
+import { getRandomDefaultImage } from '@/constans/images'
+import LocationIcon from '@/assets/icon_location.svg'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
+import { Card, CardContent } from '@/components/ui/card'
+import {
+  IEventContentCarouselProps,
+  IEventDetailSectionProps,
+} from '@/types/IEvent'
+import { useToast } from '@/hooks/use-toast'
+import LoadingSpinner from '@/components/LoadingSpinner'
+
+function ImageListCarousel({ imageList }: IEventContentCarouselProps) {
+  return (
+    <Carousel className="mx-auto w-4/5">
+      <CarouselContent className="max-h-dvh">
+        {imageList?.map((image: any) => (
+          <CarouselItem key={image.id} className="overflow-auto">
+            <div className="p-1">
+              <Card>
+                <CardContent className="flex aspect-square items-center justify-center p-6">
+                  <Image
+                    src={image.url ?? getRandomDefaultImage()}
+                    alt="Plogging eventDetail main image"
+                    width={1920}
+                    height={1080}
+                    quality={100}
+                    className="h-auto w-full rounded-lg"
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+  )
+}
 
 const EventDetailSection = ({
   eventDetail,
@@ -18,21 +62,25 @@ const EventDetailSection = ({
   isError,
   error,
   onChangeEventDetail,
-}: any) => {
+  isNavigatingPrev,
+  isNavigatingNext,
+}: IEventDetailSectionProps) => {
   if (isLoading) {
     return (
-      <section className="flex flex-[8] flex-col gap-10 md:col-span-6">
+      <section className="flex flex-col gap-10 md:col-span-6 laptop:flex-[8]">
         <LoadingSkeleton />
       </section>
     )
   }
 
-  if (isError || !eventDetail) {
+  if (isError || error || eventDetail?.status === 404 || !eventDetail) {
+    const errorMessage =
+      eventDetail?.message || '데이터를 불러오는데 실패했습니다.'
+    console.error('Event Detail Error:', { isError, error, eventDetail })
+
     return (
       <section className="flex flex-[8] flex-col gap-10 md:col-span-6">
-        <ErrorAlert
-          error={error?.message || '데이터를 불러오는데 실패했습니다'}
-        />
+        <ErrorAlert error={errorMessage} />
       </section>
     )
   }
@@ -40,22 +88,20 @@ const EventDetailSection = ({
     <section className="flex flex-[8] flex-col gap-10 pb-10 md:col-span-6">
       {/* 이벤트 상단 제목 */}
       <div className="flex w-full flex-col gap-10">
-        <HomeButton />
+        <HomeButton returnPath="/?tab=ploggingEvent" />
         <header className="flex flex-col gap-2">
           <div className="flex w-full gap-2">
             <span className="text-sm font-bold text-orange">
               {eventDetail?.region}
             </span>
-            <span className="text-sm font-bold text-textLight">일회성</span>
-            <span className="text-sm font-bold text-textLight">
-              봉사시간 부여
-            </span>
           </div>
           <h1 className="text-3xl font-bold">{eventDetail?.title}</h1>
           <div className="flex justify-between">
             <div className="flex items-center">
-              <MapPin className="h-4 w-4" />
-              <p className="text-sm font-bold text-text">양재도서관</p>
+              <LocationIcon className="h-4 w-4" />
+              <p className="text-sm font-bold text-text">
+                {eventDetail?.location}
+              </p>
             </div>
             <div>
               <p className="text-sm text-textLight">
@@ -65,14 +111,23 @@ const EventDetailSection = ({
           </div>
         </header>
       </div>
-      <div>
-        <Image
-          src="https://picsum.photos/200/200"
-          alt="Plogging eventDetail main image"
-          width={100}
-          height={100}
-          className="h-auto w-full rounded-lg"
-        />
+      <div className="relative w-full">
+        {eventDetail?.imageList?.length <= 1 ? (
+          <Image
+            src={
+              eventDetail?.imageList.length > 0
+                ? eventDetail?.imageList[0]?.url
+                : getRandomDefaultImage()
+            }
+            alt={eventDetail?.imageList[0]?.caption ?? '플로깅 이미지'}
+            width={1920}
+            height={1080}
+            quality={80}
+            className="h-auto w-full rounded-lg"
+          />
+        ) : (
+          <ImageListCarousel imageList={eventDetail.imageList} />
+        )}
       </div>
       {/* 이벤트 상세 정보 */}
       <div className="rounded-lg bg-background p-6">
@@ -83,29 +138,17 @@ const EventDetailSection = ({
             content={`${eventDetail.startDate} - ${eventDetail.endDate}`}
           />
           <LabeledContent
-            label="참여대상"
-            content={`${eventDetail?.participationTarget}`}
-          />
-          <LabeledContent
             label="참여장소"
             content={eventDetail?.location ?? '-'}
           />
           <LabeledContent
-            label="지원내용"
-            content={eventDetail?.participationTarget ?? '-'}
-          />
-          <LabeledContent label="봉사점수" content="0.5시간" />
-          <LabeledContent
             label="참여방법"
-            content="양재천 ~ 양재천 일대를 걸으며 쓰레기(플로깅)"
+            type="link"
+            content={eventDetail?.url ?? '-'}
           />
           <LabeledContent
             label="담당자명"
-            content={eventDetail?.organizerName ?? '-'}
-          />
-          <LabeledContent
-            label="전화번호"
-            content={eventDetail?.phoneNumber ?? '-'}
+            content={eventDetail?.managerName ?? '-'}
           />
           <LabeledContent
             label="전화번호"
@@ -113,30 +156,38 @@ const EventDetailSection = ({
           />
         </div>
         <div className="prose max-w-none space-y-4 text-sm">
-          <span className="border-green- whitespace-nowrap rounded-md border bg-green p-1 text-xs font-semibold text-white">
+          <p className="flex min-h-[22px] w-[53px] items-center justify-center whitespace-nowrap rounded-sm border bg-green p-1 text-xs font-medium text-white">
             상세내용
-          </span>
-          <p className="mb-4 text-xs text-text">
+          </p>
+          <p className="mb-4 whitespace-pre-wrap text-xs text-text">
             {eventDetail?.content ?? '-'}
           </p>
         </div>
       </div>
       <div className="flex items-center justify-between">
         <Button
-          className="bg-solid"
+          className="min-w-[120px] bg-solid"
           onClick={() => {
             onChangeEventDetail('prev')
           }}
         >
-          이전 이벤트 보기
+          {isNavigatingPrev ? (
+            <LoadingSpinner color="grey" />
+          ) : (
+            '이전 이벤트 보기'
+          )}
         </Button>
         <Button
-          className="bg-solid"
+          className="min-w-[120px] bg-solid"
           onClick={() => {
             onChangeEventDetail('next')
           }}
         >
-          다음 이벤트 보기
+          {isNavigatingNext ? (
+            <LoadingSpinner color="grey" />
+          ) : (
+            '다음 이벤트 보기'
+          )}
         </Button>
       </div>
     </section>
@@ -149,8 +200,11 @@ export default function EventDetailPage() {
   const pageSize = 6 // 페이지 당 아이템 수
   const path = usePathname()
   const eventId = path.split('/').pop()
+  const { toast } = useToast()
 
   const handlePageChange = async (newPage: number) => {
+    if (newPage < 0) return
+    if (eventsList?.totalPages && newPage >= eventsList.totalPages) return
     setCurrentPage(newPage)
   }
 
@@ -159,7 +213,7 @@ export default function EventDetailPage() {
     eventDetail,
     eventDetailIsError,
     eventDetailIsLoading,
-
+    eventDetailError,
     //이벤트 페이지네이션
     eventsList,
     eventListIsError,
@@ -167,6 +221,8 @@ export default function EventDetailPage() {
 
     // 이전 이벤트, 다음 이벤트
     navigate,
+    isNavigatingPrev,
+    isNavigatingNext,
   } = useEventsQueries({
     currentPage,
     pageSize,
@@ -180,12 +236,12 @@ export default function EventDetailPage() {
       { type, currentId: eventDetail.id },
       {
         onError: (error: Error) => {
-          console.log('error', error)
-          // toast({
-          //   title: '이동 실패',
-          //   description: '이벤트 데이터를 불러오는데 실패했습니다.',
-          //   variant: 'destructive',
-          // })
+          toast({
+            title: '이동 실패',
+            description: `${error.message}`,
+            variant: 'destructive',
+            duration: 1500,
+          })
         },
       },
     )
@@ -196,13 +252,15 @@ export default function EventDetailPage() {
       {/* // 이벤트 이미지 밎 상세 정보 */}
       <div className="flex w-full gap-6">
         {/* 왼쪽 뉴스 디테일 */}
-        <div className="min-w-0 laptop:flex-[8]">
+        <div className="w-full min-w-0 laptop:flex-[8]">
           <EventDetailSection
             eventDetail={eventDetail}
             isLoading={eventDetailIsLoading}
             isError={eventDetailIsError}
-            error={eventDetailIsError}
+            error={eventDetailError}
             onChangeEventDetail={onChangeEventDetail}
+            isNavigatingPrev={isNavigatingPrev}
+            isNavigatingNext={isNavigatingNext}
           />
         </div>
 
@@ -212,8 +270,8 @@ export default function EventDetailPage() {
         {/* 오른쪽 사이드바 */}
         <div className="hidden min-w-0 laptop:block laptop:flex-[4]">
           <ContentList
-            contentData={eventsList?.content}
-            totalPage={eventsList?.totalPages}
+            contentData={eventsList?.content ?? []}
+            totalPage={eventsList?.totalPages ?? 0}
             currentPage={currentPage}
             handlePageChange={handlePageChange}
             cotentListIsLoading={eventsListIsLoading}

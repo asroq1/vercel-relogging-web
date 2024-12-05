@@ -1,6 +1,3 @@
-export const DEFAULT_IMAGE =
-  'https://www.gravatar.com/avatar/iml1111?d=identicon&s=400' as const
-
 export interface NewsArticleCard {
   id: string
   title: string

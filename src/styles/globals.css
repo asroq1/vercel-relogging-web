@@ -138,9 +138,9 @@ body {
 }
 
 @layer base {
-  /* * {
-    @apply border-border;
-  } */
+  html {
+    font-family: 'Spoqa Han Sans Neo', system-ui, sans-serif;
+  }
   body {
     @apply bg-background text-foreground;
   }

@@ -1,4 +1,4 @@
-import { EventContentCard } from '@/types/IEvent'
+import { IEventContentCard } from '@/types/IEvent'
 import { NewsArticleCard } from '@/types/INews'
 import { useQuery } from '@tanstack/react-query'
 import { fetchNewsLists } from './useNewsQueries'
@@ -36,7 +36,7 @@ const fetchStrategies = {
   },
 }
 
-export function useContentList<T extends NewsArticleCard | EventContentCard>({
+export function useContentList<T extends NewsArticleCard | IEventContentCard>({
   contentType,
   currentPage,
   pageSize,

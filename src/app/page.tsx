@@ -1,10 +1,11 @@
 'use client'
 
-import EventListGrid from '@/components/EventListGrid'
-import NewsListGrid from '@/components/NewsListGrid'
-import { useState } from 'react'
 import Image from 'next/image'
 import Footer from '@/components/layouts/Footer'
+import { useRouter, useSearchParams } from 'next/navigation'
+import MeetupList from '@/components/MeetupList'
+import EventListGrid from '@/components/EventListGrid'
+import NewsListGrid from '@/components/NewsListGrid'
 
 const images = {
   mobile: {
@@ -25,8 +26,31 @@ const images = {
 } as const
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('지자체 플로깅')
-  // max-w-[1440px]
+  const router = useRouter()
+  const searchParms = useSearchParams()
+  const currentTab = searchParms.get('tab') || 'ploggingEvent'
+  const tabList = [
+    { id: 'ploggingEvent', label: '우리 동네 플로깅' },
+    { id: 'meetup', label: '플로깅 모임' },
+    { id: 'news', label: '뉴스' },
+  ]
+
+  const handleTabChange = (tabId: string) => {
+    router.replace(`/?tab=${tabId}`, { scroll: false })
+  }
+
+  const renderContent = () => {
+    switch (currentTab) {
+      case 'ploggingEvent':
+        return <EventListGrid />
+      case 'news':
+        return <NewsListGrid />
+      case 'meetup':
+        return <MeetupList />
+      default:
+        return <EventListGrid />
+    }
+  }
   return (
     <div className="h-full w-full bg-background">
       <section className="margin-auto hidden w-dvw laptop:block">
@@ -34,9 +58,8 @@ export default function Home() {
           {...images.desktop}
           alt="로고 이미지"
           priority
-          quality={100}
           sizes="(min-width: 1200px) 100vw"
-          className="h-auto w-full"
+          className="h-auto max-h-[548px] w-full object-cover"
         />
       </section>
       <section className="hidden tablet:block laptop:hidden">
@@ -44,9 +67,8 @@ export default function Home() {
           {...images.tablet}
           alt="로고 이미지"
           priority
-          quality={100}
           sizes="(min-width: 600px) and (max-width: 1199px) 100vw"
-          className="h-auto w-full"
+          className="h-auto max-h-[548px] w-full object-cover"
         />
       </section>
       <section className="block tablet:hidden">
@@ -54,9 +76,8 @@ export default function Home() {
           {...images.mobile}
           alt="로고 이미지"
           priority
-          quality={100}
-          sizes="(max-width: 599px) 100vw"
-          className="h-auto w-full"
+          sizes="(max-width: 599px) 100vw  max-h-[700px]"
+          className="h-auto max-h-[548px] w-full object-cover"
         />
       </section>
       {/* 메인 콘텐츠 */}
@@ -64,33 +85,25 @@ export default function Home() {
         <main className="mx-auto max-w-7xl laptop:mt-16">
           {/* 탭 섹션 */}
           <div className="rounded-lg bg-white p-5 shadow laptop:p-10">
-            <div className="mb-4 flex border-b border-gray-200">
-              <button
-                className={`block px-6 py-4 text-gray-600 hover:text-textLight focus:outline-none ${
-                  activeTab === '지자체 플로깅'
-                    ? 'border-b-2 border-text font-medium text-blue-500'
-                    : ''
-                }`}
-                onClick={() => setActiveTab('지자체 플로깅')}
-              >
-                지자체 플로깅
-              </button>
-              <button
-                className={`block px-6 py-4 text-gray-600 hover:text-textLight focus:outline-none ${
-                  activeTab === '환경 뉴스'
-                    ? 'border-b-2 border-text font-medium text-blue-500'
-                    : ''
-                }`}
-                onClick={() => setActiveTab('환경 뉴스')}
-              >
-                환경 뉴스
-              </button>
+            <div className="mb-4 flex">
+              {tabList.map((tab) => {
+                return (
+                  <button
+                    key={tab.id}
+                    className={`block whitespace-nowrap px-6 pb-1 pt-4 text-gray-600 hover:text-textLight ${
+                      tab.id === currentTab
+                        ? 'border-b-2 border-green font-medium text-text'
+                        : ''
+                    }`}
+                    onClick={() => handleTabChange(tab.id)}
+                  >
+                    {tab.label}
+                  </button>
+                )
+              })}
             </div>
-            {activeTab === '지자체 플로깅' && <EventListGrid />}
-            {/* 뉴스 그리드 */}
-            {activeTab === '환경 뉴스' && <NewsListGrid />}
-            {/* 지자체 행사 그리드 */}
-            {/* )} */}
+            {/* 콘텐츠 섹션 */}
+            {renderContent()}
           </div>
         </main>
       </div>
