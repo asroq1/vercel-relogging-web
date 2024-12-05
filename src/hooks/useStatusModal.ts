@@ -1,6 +1,7 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useCallback } from 'react'
 
 export type ModalMode = 'login' | 'mypage' | 'profile'
 
@@ -15,21 +16,25 @@ export const useStatusModal = ({ type, mode }: useStatusModalProps) => {
   const searchParams = useSearchParams()
 
   const currentMode = searchParams.get(type)
-
   const isOpen = currentMode === mode
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     const params = new URLSearchParams(searchParams)
     if (mode) {
-      params.set(type, mode.toString())
+      params.set(type, mode)
     }
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
-  }
-  const closeModal = () => {
+  }, [searchParams, type, mode, router, pathname])
+
+  const closeModal = useCallback(() => {
     const params = new URLSearchParams(searchParams)
     params.delete(type)
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
-  }
+  }, [searchParams, type, router, pathname])
 
-  return { isOpen, openModal, closeModal }
+  return {
+    isOpen: isOpen ?? false,
+    openModal,
+    closeModal,
+  } as const
 }
