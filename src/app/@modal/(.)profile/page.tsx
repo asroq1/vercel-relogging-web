@@ -19,7 +19,6 @@ import { useUpdateProfile } from '@/hooks/useUpdateProfile'
 import IconGarbage from '@/assets/icon_garbage.svg'
 import { validateImage } from '@/utils/image'
 import { useToast } from '@/hooks/use-toast'
-import DEFAULT_PROFILE_IMAGE from '../../../../public/defaultProfile.jpg'
 
 type EditingProfileProps = {
   user: User
@@ -35,6 +34,8 @@ function BeforeEditingProfile({
   const handleEditProfile = () => {
     setIsEditing(true)
   }
+
+  const DEFAULT_PROFILE_IMAGE = '/defaultProfile.jpg'
   return (
     <DialogContent className="h-dvh w-full max-w-[560px] bg-white p-0 laptop:max-h-[689px]">
       <DialogHeader className="p-6 pb-2">
