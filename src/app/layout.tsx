@@ -11,14 +11,17 @@ import LoadingScreen from '@/components/layouts/LoadingScreen'
 export const metadata: Metadata = {
   title: {
     template: '%s | 리로깅',
-    default: '리로깅 - 플로깅 커뮤니티 플랫폼',
+    default: '리로깅 - 플로깅 정보 모음 플랫폼',
   },
   description:
     '리로깅은 플로거들에게 다양한 환경뉴스 및 지자체 플로깅 정보를 제공하고, 플로거들간 커뮤니티가 활성화될 수 있도록 돕습니다.',
+  icons: {
+    icon: '/icon.ico', // 기본 파비콘
+  },
   keywords: ['플로깅', '환경', '운동', '커뮤니티'],
   authors: [{ name: '리로깅' }],
   openGraph: {
-    title: '리로깅',
+    title: '리로깅 - 플로깅 정보 모음 플랫폼',
     description: '플로깅 커뮤니티 플랫폼',
     url: 'https://re-logging.com',
     siteName: '리로깅',
