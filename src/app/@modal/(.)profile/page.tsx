@@ -35,7 +35,7 @@ function BeforeEditingProfile({
     setIsEditing(true)
   }
 
-  const DEFAULT_PROFILE_IMAGE = '/defaultProfile.jpg'
+  const DEFAULT_PROFILE_IMAGE = '/defaultProfile.png'
   return (
     <DialogContent className="h-dvh w-full max-w-[560px] bg-white p-0 laptop:max-h-[689px]">
       <DialogHeader className="p-6 pb-2">
@@ -46,7 +46,7 @@ function BeforeEditingProfile({
         </div>
       </DialogHeader>
       <div className="px-6 pb-4">
-        <p className="mb-6 text-sm text-gray-600">
+        <p className="mb-6 whitespace-nowrap text-sm text-gray-600">
           리로깅 내에서 활동하실 닉네임과 프로필사진을 설정해주세요.
         </p>
 
@@ -63,14 +63,16 @@ function BeforeEditingProfile({
             />
           </div>
 
-          <div className="space-y-2">
-            <div className="flex items-center gap-4">
-              <Label className="text-sm font-medium">프로필이미지</Label>
-              <Label className="textLight text-textLight">
+          <div className="flex flex-col gap-4 space-y-2">
+            <div className="flex items-center gap-8">
+              <Label className="whitespace-nowrap text-sm font-medium">
+                프로필이미지
+              </Label>
+              <Label className="whitespace-nowrap text-xs font-light text-textLight">
                 이미지 미첨부시 랜덤이미지가 적용됩니다.
               </Label>
             </div>
-            <div className="mt-2 flex justify-center">
+            <div className="flex justify-center">
               <div className="relative h-32 w-32 border-x-solid">
                 <Image
                   src={user?.image ?? DEFAULT_PROFILE_IMAGE}
@@ -190,7 +192,7 @@ function AfterEditingProfile({ setIsEditing, user }: EditingProfileProps) {
       </DialogHeader>
 
       <div className="px-6 pb-4">
-        <p className="mb-6 text-sm text-gray-600">
+        <p className="mb-6 whitespace-nowrap text-sm text-gray-600">
           리로깅 내에서 활동하실 닉네임과 프로필사진을 설정해주세요.
         </p>
 
@@ -209,8 +211,10 @@ function AfterEditingProfile({ setIsEditing, user }: EditingProfileProps) {
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label className="text-sm font-medium">프로필이미지</Label>
-              <Label className="text-sm font-medium text-textLight">
+              <Label className="whitespace-nowrap text-sm font-medium">
+                프로필이미지
+              </Label>
+              <Label className="whitespace-nowrap text-xs font-light text-textLight">
                 이미지 미첨부시 랜덤이미지가 적용됩니다.
               </Label>
             </div>

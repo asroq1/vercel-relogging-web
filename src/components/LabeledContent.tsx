@@ -3,11 +3,13 @@ import LinkIcon from '@/assets/icon_link.svg'
 interface LabeledContentProps {
   label: string
   content: string
+  linkLabel?: string
   type?: string
 }
 
 export default function LabeledContent({
   label,
+  linkLabel,
   content,
   type,
 }: LabeledContentProps) {
@@ -26,7 +28,7 @@ export default function LabeledContent({
           <span>
             <LinkIcon />
           </span>{' '}
-          웹사이트 바로가기
+          {linkLabel}
         </Link>
       ) : (
         <p className="text-xs text-text">{content ?? '-'}</p>

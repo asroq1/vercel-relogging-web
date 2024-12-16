@@ -1,7 +1,7 @@
 'use client'
 
 import HomeButton from '@/components/HomeButton'
-import { Button } from '@/components/ui/button'
+// import { Button } from '@/components/ui/button'
 import { MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
@@ -11,10 +11,10 @@ import { ErrorAlert } from '@/components/status/ErrorAlert'
 import { LoadingSkeleton } from '@/components/status/LoadingSkeleton'
 import ContentList from '@/components/ContentList'
 import { useMeetupQueries } from '@/hooks/useMeetupList'
-import { IMeetupDetailSectionProps, MeetupDetailType } from '@/types/IMeetup'
+import { IMeetupDetailSectionProps } from '@/types/IMeetup'
 import { getRandomDefaultImage } from '@/constans/images'
-import { useToast } from '@/hooks/use-toast'
-import LoadingSpinner from '@/components/LoadingSpinner'
+// import { useToast } from '@/hooks/use-toast'
+// import LoadingSpinner from '@/components/LoadingSpinner'
 import dayjs from 'dayjs'
 
 const MeetupDetailSection = ({
@@ -22,9 +22,9 @@ const MeetupDetailSection = ({
   isLoading,
   isError,
   error,
-  handleMeetupChange,
-  isNavigatingPrev,
-  isNavigatingNext,
+  // handleMeetupChange,
+  // isNavigatingPrev,
+  // isNavigatingNext,
 }: IMeetupDetailSectionProps) => {
   if (isLoading) {
     return (
@@ -131,7 +131,7 @@ const MeetupDetailSection = ({
           </p>
         </div>
       </div>
-      <div className="flex items-center justify-between">
+      {/* <div className="flex items-center justify-between">
         <Button
           className="min-w-[120px] bg-solid"
           onClick={() => {
@@ -156,7 +156,7 @@ const MeetupDetailSection = ({
             '다음 모임 보기'
           )}
         </Button>
-      </div>
+      </div> */}
     </section>
   )
 }
@@ -167,7 +167,7 @@ export default function MeetupDetailContent() {
   const pageSize = 6 // 페이지 당 아이템 수
   const path = usePathname()
   const meetupId = path.split('/').pop() || ''
-  const { toast } = useToast()
+  // const { toast } = useToast()
 
   const handlePageChange = async (newPage: number) => {
     if (newPage < 0) return
@@ -186,32 +186,32 @@ export default function MeetupDetailContent() {
     meetupListIsLoading,
 
     // 이전 이벤트, 다음 이벤트
-    navigate,
-    isNavigatingNext,
-    isNavigatingPrev,
+    // navigate,
+    // isNavigatingNext,
+    // isNavigatingPrev,
   } = useMeetupQueries({
     currentPage,
     pageSize,
     meetupId,
   })
 
-  const onChangeMeetupDetail = (type: MeetupDetailType) => {
-    if (!meetupDetail?.id) return
+  // const onChangeMeetupDetail = (type: MeetupDetailType) => {
+  //   if (!meetupDetail?.id) return
 
-    navigate(
-      { type, currentId: meetupDetail.id },
-      {
-        onError: (error: Error) => {
-          toast({
-            title: '이동 실패',
-            description: `${error.message}`,
-            variant: 'destructive',
-            duration: 1500,
-          })
-        },
-      },
-    )
-  }
+  //   navigate(
+  //     { type, currentId: meetupDetail.id },
+  //     {
+  //       onError: (error: Error) => {
+  //         toast({
+  //           title: '이동 실패',
+  //           description: `${error.message}`,
+  //           variant: 'destructive',
+  //           duration: 1500,
+  //         })
+  //       },
+  //     },
+  //   )
+  // }
 
   return (
     <article className="m-auto mt-16 flex max-h-[1355px] w-full max-w-7xl gap-6 bg-white p-5">
@@ -224,9 +224,9 @@ export default function MeetupDetailContent() {
             isLoading={meetupDetailiIsLoading}
             isError={meetupDetailiIsLoading}
             error={meetupDetailError}
-            handleMeetupChange={onChangeMeetupDetail}
-            isNavigatingPrev={isNavigatingPrev}
-            isNavigatingNext={isNavigatingNext}
+            // handleMeetupChange={onChangeMeetupDetail}
+            // isNavigatingPrev={isNavigatingPrev}
+            // isNavigatingNext={isNavigatingNext}
           />
         </div>
 

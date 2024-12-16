@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { getRandomDefaultImage } from '@/constans/images'
 import { IMeetupContentCard } from '@/types/IMeetup'
@@ -7,20 +7,43 @@ import IconTime from '@/assets/icon_time.svg'
 import IconLocation from '@/assets/icon_location.svg'
 import dayjs from 'dayjs'
 
+interface IMeetupCardProps {
+  meetupData: IMeetupContentCard
+  styleType: 'grid' | 'side'
+  currentPage: number
+}
 export const MeetupCard = ({
   meetupData,
-}: {
-  meetupData: IMeetupContentCard
-}) => {
+  styleType,
+  currentPage,
+}: IMeetupCardProps) => {
   const router = useRouter()
+  const pathname = usePathname()
+  const meetupDetailId = pathname.split('/').pop()?.toString()
+  const isClicked = meetupDetailId === meetupData.id.toString()
 
   const onClickMeeupDetail = (id: string) => {
-    router.push(`/meetup/${id}`)
+    switch (styleType) {
+      case 'side':
+        router.push(`/meetup/${id}?index=${currentPage}`, {
+          scroll: false,
+        })
+        break
+
+      default:
+        router.push(`/meetup/${id}`, {
+          scroll: false,
+        })
+    }
   }
 
   return (
     <Card
-      className="flex aspect-[378/175] min-h-[200px] w-full cursor-pointer flex-col overflow-hidden p-4 transition-shadow duration-300 hover:shadow-lg laptop:min-h-[200px] laptop:max-w-[378px]"
+      className={`flex aspect-[378/175] min-h-[200px] w-full cursor-pointer flex-col overflow-hidden p-4 transition-shadow duration-300 hover:shadow-lg laptop:min-h-[200px] laptop:max-w-[378px] ${
+        isClicked
+          ? 'border-2 border-green bg-green/5 shadow-md'
+          : 'hover:shadow-lg'
+      } `}
       onClick={() => onClickMeeupDetail(meetupData.id.toString())}
     >
       {/* <CardContent className="p-6"> */}

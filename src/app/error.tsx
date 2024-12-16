@@ -1,5 +1,8 @@
+'use client'
+
 import IconSad from '@/assets/icon_sad.svg'
 import DirectionButton from '@/components/ui/DircetionButton'
+import Link from 'next/link'
 
 export default function NotFound() {
   return (
@@ -10,20 +13,21 @@ export default function NotFound() {
             <span>
               <IconSad />
             </span>
-            원하시는 페이지를 찾을 수 없어요.
+            예상치 못한 오류가 발생했습니다.
           </h1>
           <p className="text-sm text-textLight laptop:text-base">
-            찾으시려던 페이지가 이동되었거나 삭제되었을 수 있어요. 불편을 드려
-            죄송합니다.
+            지속적으로 발생 시 관리자에게 문의해주세요.
           </p>
+          <Link
+            href="mailto:reloggingofficial@gmail.com"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-sm text-textLight hover:text-text hover:underline laptop:text-base"
+          >
+            reloggingofficial@gmail.com
+          </Link>
         </div>
         <div className="gap- flex flex-col gap-4">
-          <DirectionButton
-            to="/"
-            className={'h-[48px] w-[240px] bg-green text-base text-white'}
-          >
-            이전 페이지로 돌아가기
-          </DirectionButton>
           <DirectionButton
             to="/"
             className={'h-[48px] w-[240px] bg-green text-base text-white'}

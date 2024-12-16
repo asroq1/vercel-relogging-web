@@ -1,6 +1,7 @@
 import { IMeetupListResponse, ImeetupQueries } from '@/types/IMeetup'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
+import { toast } from '@/hooks/use-toast'
 
 export async function fetchMeetupingArticle(page: number, size: number) {
   const params = new URLSearchParams()
@@ -106,6 +107,7 @@ export const useMeetupQueries = ({
     isNavigatingNext:
       navigationMutation.isPending &&
       navigationMutation.variables?.type === 'next',
+    refetchMeetupDetail: meetupDetailQuery.refetch,
   }
 }
 
@@ -146,6 +148,8 @@ export const useCreateMeetupQueries = () => {
         method: 'POST',
         body: formData,
       })
+      if (response.status === 302)
+        throw new Error('로그인이 필요한 서비스입니다.')
       if (!response.ok) throw new Error('모임 등록 실패')
 
       return response.json()
@@ -153,10 +157,22 @@ export const useCreateMeetupQueries = () => {
     onSuccess: () => {
       console.log('모임 등록 성공')
       queryClient.invalidateQueries({ queryKey: ['meetups'] })
+      toast({
+        title: '모임 등록 성공',
+        description: '모임이 성공적으로 등록되었습니다.',
+        variant: 'default',
+        duration: 1500,
+      })
       router.back()
     },
-    onError: (error) => {
-      console.error('모임 등록 실패111', error)
+    onError: (error: Error) => {
+      toast({
+        title: '모임 등록 실패',
+        description: error.message || '모임 등록 중 오류가 발생했습니다.',
+        variant: 'destructive',
+        duration: 1500,
+      })
+      console.error('Error:', error)
       throw new Error('모임 등록 실패')
     },
   })

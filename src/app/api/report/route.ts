@@ -3,43 +3,52 @@ import { cookies } from 'next/headers'
 
 export async function POST(request: Request) {
   const token = cookies().get('accessToken')
-  const formData = await request.formData()
+
+  if (!token) {
+    return Response.json(
+      {
+        message: '로그인이 필요한 서비스입니다.',
+        redirect: '/?auth=login',
+      },
+      { status: 302 },
+    )
+  }
+
+  const { reason } = await request.json()
+  const { searchParams } = new URL(request.url)
+  const commentId = searchParams.get('commentId')
 
   try {
-    if (!token) {
-      return Response.json(
-        {
-          message: '로그인이 필요한 서비스입니다.',
-          redirect: '/?auth=login',
-        },
-        { status: 302 },
-      )
-    }
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/ploggingMeetups`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/comments/${commentId}/report`,
       {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token?.value}`,
         },
-        body: formData,
+        body: JSON.stringify({ reason }),
       },
     )
-    // 액세스 토큰 만료
+
+    if (!response.ok) {
+      throw new Error('신고에 실패했습니다.')
+    }
+
     if (response.status === 401) {
       try {
         // 1. 토큰 재발급 시도
         const newToken = await refreshToken()
         // 2. 원래 요청 재시도
         const retryResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/account`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/comments/${commentId}/report`,
           {
-            method: 'PUT',
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${newToken}`,
             },
-            body: formData,
+            body: JSON.stringify({ reason }),
           },
         )
         console.log('토큰 갱신 후 재요청1:', retryResponse)
@@ -56,10 +65,10 @@ export async function POST(request: Request) {
         return Response.redirect(new URL('/?auth=login', request.url))
       }
     }
-    const responseData = await response.json()
-    return Response.json(responseData)
+
+    return Response.json({ message: '신고가 완료되었습니다.' })
   } catch (error) {
-    console.error('Error:', error)
-    return Response.json({ error: 'Request failed' }, { status: 500 })
+    console.error('신고 오류:', error)
+    return Response.json({ error: '신고 실패' }, { status: 500 })
   }
 }

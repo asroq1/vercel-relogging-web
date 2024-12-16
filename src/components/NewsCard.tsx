@@ -2,44 +2,41 @@ import { NewsArticleCard } from '@/types/INews'
 import { getRandomDefaultImage } from '@/constans/images'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { useNewsQueries } from '@/hooks/useNewsQueries'
+import { usePathname, useRouter } from 'next/navigation'
 
-const NewsCard = ({ article }: { article: NewsArticleCard }) => {
+interface IEventCardProps {
+  article: NewsArticleCard
+  styleType: 'grid' | 'side'
+  currentPage: number
+}
+const NewsCard = ({ article, styleType, currentPage }: IEventCardProps) => {
   const router = useRouter()
-  const {
-    // 이전 이벤트, 다음 이벤트
-    navigate,
-  } = useNewsQueries({})
+  const pathname = usePathname()
+  const eventDetailId = pathname.split('/').pop()?.toString()
+  const isClicked = eventDetailId === article.id.toString()
 
-  const onClickNewsDetail = (type: 'main' | 'side') => {
-    if (type === 'side') {
-      // mutation 실행
-      navigate(
-        {
-          type: 'side',
-          currentId: article.id,
-        },
-        {
-          onSuccess: (article) => {
-            router.push(`/news/${article.data.id}`)
-          },
-          onError: (error: Error) => {
-            console.error('Navigation failed:', error)
-            // 에러 처리
-          },
-        },
-      )
-    } else {
-      router.push(`/news/${article.id}`)
+  const onClickNewsDetail = (id: string) => {
+    switch (styleType) {
+      case 'side':
+        router.push(`/news/${id}?index=${currentPage}`, {
+          scroll: false,
+        })
+        break
+      default:
+        router.push(`/news/${id}`, {
+          scroll: false,
+        })
     }
   }
   return (
     //카드 컨테이너
     <Card
-      onClick={() => onClickNewsDetail('side')}
-      key={article?.id}
-      className="/* 데스크탑 너비 */ /* 데스크탑 높이 */ flex aspect-[378/175] min-h-[200px] w-full cursor-pointer flex-col gap-4 overflow-hidden p-4 transition-shadow duration-300 hover:shadow-lg laptop:min-h-[200px] laptop:max-w-[378px]"
+      className={`flex aspect-[378/175] min-h-[200px] w-full cursor-pointer flex-col overflow-hidden p-4 transition-shadow duration-300 hover:shadow-lg laptop:min-h-[200px] laptop:max-w-[378px] ${
+        isClicked
+          ? 'border-2 border-green bg-green/5 shadow-md'
+          : 'hover:shadow-lg'
+      } `}
+      onClick={() => onClickNewsDetail(article.id)}
     >
       {/* 카드 헤더 */}
       <CardHeader className="h-[25%] space-y-0 p-0">

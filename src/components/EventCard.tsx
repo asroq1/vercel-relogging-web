@@ -1,22 +1,50 @@
 import { IEventContentCard } from '@/types/IEvent'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { getRandomDefaultImage } from '@/constans/images'
 import dayjs from 'dayjs'
 import IconTime from '@/assets/icon_time.svg'
 import IconLocation from '@/assets/icon_location.svg'
 
-export const EventCard = ({ eventData }: { eventData: IEventContentCard }) => {
+interface IEventCardProps {
+  eventData: IEventContentCard
+  styleType: 'grid' | 'side'
+  currentPage: number
+}
+
+export const EventCard = ({
+  eventData,
+  styleType,
+  currentPage,
+}: IEventCardProps) => {
   const router = useRouter()
+  const pathname = usePathname()
+  const eventDetailId = pathname.split('/').pop()?.toString()
+  const isClicked = eventDetailId === eventData.id.toString()
 
   const onClickEventDetail = (id: string) => {
-    router.push(`/events/${id}`)
+    switch (styleType) {
+      case 'side':
+        router.push(`/events/${id}?index=${currentPage}`, {
+          scroll: false,
+        })
+        break
+
+      default:
+        router.push(`/events/${id}`, {
+          scroll: false,
+        })
+    }
   }
 
   return (
     <Card
-      className="flex aspect-[378/175] min-h-[200px] w-full cursor-pointer flex-col overflow-hidden p-4 transition-shadow duration-300 hover:shadow-lg laptop:min-h-[200px] laptop:max-w-[378px]"
+      className={`flex aspect-[378/175] min-h-[200px] w-full cursor-pointer flex-col overflow-hidden p-4 transition-shadow duration-300 hover:shadow-lg laptop:min-h-[200px] laptop:max-w-[378px] ${
+        isClicked
+          ? 'border-2 border-green bg-green/5 shadow-md'
+          : 'hover:shadow-lg'
+      } `}
       onClick={() => onClickEventDetail(eventData.id)}
     >
       {/* 상단 정보 */}

@@ -7,6 +7,7 @@ export interface User {
   email: string
   nickname: string
   name: string
+  userId?: string
 }
 
 interface AuthState {

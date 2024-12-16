@@ -184,20 +184,8 @@ export default function MeetupFormModal() {
         },
         image: imageFile || null,
       })
-      toast({
-        title: '플로깅 모임이 등록되었습니다',
-        variant: 'default',
-        duration: 1500,
-      })
-      router.back()
     } catch (error) {
-      toast({
-        title: '오류가 발생했습니다',
-        description: '모임 등록에 실패했습니다.',
-        variant: 'destructive',
-        duration: 1500,
-      })
-      console.error('Error:', error)
+      console.error('모임 등록 Error:', error)
     }
   }
 

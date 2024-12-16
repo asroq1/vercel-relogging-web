@@ -14,10 +14,11 @@ export type ContentType =
   | IEventContentCard
   | IMeetupContentCard
 export type EventType = 'news' | 'events' | 'meetup'
+export type styletype = 'grid' | 'side'
 interface IContentList {
   contentData: ContentType[]
   eventType: EventType
-  styleType: 'grid' | 'side'
+  styleType: styletype
   currentPage: number
   totalPage: number
   handlePageChange: (newPage: number) => void
@@ -26,15 +27,39 @@ interface IContentList {
   contentListError?: Error
 }
 
-const contentTemplate = (item: ContentType, type: EventType) => {
-  switch (type) {
+const contentTemplate = (
+  item: ContentType,
+  eventType: EventType,
+  styleType: styletype,
+  currentPage: number,
+) => {
+  switch (eventType) {
     case 'news':
-      return <NewsCard article={item as NewsArticleCard} key={item.id} />
+      return (
+        <NewsCard
+          article={item as NewsArticleCard}
+          key={item.id}
+          styleType={styleType}
+          currentPage={currentPage}
+        />
+      )
     case 'events':
-      return <EventCard eventData={item as IEventContentCard} key={item.id} />
+      return (
+        <EventCard
+          eventData={item as IEventContentCard}
+          styleType={styleType}
+          currentPage={currentPage}
+          key={item.id}
+        />
+      )
     case 'meetup':
       return (
-        <MeetupCard meetupData={item as IMeetupContentCard} key={item.id} />
+        <MeetupCard
+          meetupData={item as IMeetupContentCard}
+          key={item.id}
+          styleType={styleType}
+          currentPage={currentPage}
+        />
       )
     default:
       return null
@@ -68,7 +93,7 @@ const ContentList = ({
   }
 
   if (cotentListIsLoading) {
-    return <LoadingSkeleton />
+    return <LoadingSkeleton columns={1} rows={5} />
   }
 
   if (contentListIsError) {
@@ -91,7 +116,9 @@ const ContentList = ({
   return (
     <div className={containerStyles[styleType]}>
       <section className={layoutStyles[styleType]}>
-        {contentData.map((item) => contentTemplate(item, eventType))}
+        {contentData.map((item) =>
+          contentTemplate(item, eventType, styleType, currentPage),
+        )}
       </section>
       <div className={paginationStyles[styleType]}>
         <ContentsPagination

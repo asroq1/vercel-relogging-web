@@ -6,9 +6,10 @@ export interface IMeetupDetailSectionProps {
   isLoading: boolean
   isError: boolean
   error: Error | null
-  handleMeetupChange: (type: MeetupDetailType) => void
-  isNavigatingNext: boolean
-  isNavigatingPrev: boolean
+  // handleMeetupChange: (type: MeetupDetailType) => void
+  // isNavigatingNext: boolean
+  // isNavigatingPrev: boolean
+  // refetchMeetupDetail: () => void
 }
 
 export interface ImeetupQueries {

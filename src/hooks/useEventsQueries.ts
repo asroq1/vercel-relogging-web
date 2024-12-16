@@ -45,8 +45,8 @@ export const useEventsQueries = ({
   const eventsListQuery = useQuery<IPloggingEventContentList>({
     queryKey: ['eventsList', currentPage, pageSize],
     queryFn: () => fetchEventsArticle(currentPage ?? 0, pageSize ?? 15),
-    staleTime: 5 * 60 * 1000, // 데이터가 "신선"하다고 간주되는 시간 (5분)
-    gcTime: 30 * 60 * 1000, // 데이터가 캐시에 유지되는 시간 (30분)
+    // staleTime: 5 * 60 * 1000, // 데이터가 "신선"하다고 간주되는 시간 (5분)
+    // gcTime: 30 * 60 * 1000, // 데이터가 캐시에 유지되는 시간 (30분)
   })
 
   const eventDetailQuery = useQuery({
@@ -125,5 +125,7 @@ export const useEventsQueries = ({
     isNavigatingNext:
       navigationMutation.isPending &&
       navigationMutation.variables?.type === 'next',
+
+    refetchEventDetail: eventDetailQuery.refetch,
   }
 }

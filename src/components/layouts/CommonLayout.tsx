@@ -21,7 +21,7 @@ export function CommonLayout({
 }>) {
   return (
     <>
-      <nav className="flex h-full max-h-[60px] w-full items-center justify-between bg-white p-5 laptop:h-16">
+      <nav className="fixed top-0 z-[9999] flex h-full max-h-[60px] w-full items-center justify-between bg-white p-5 laptop:h-16">
         <div>
           <Link href="/" className="text-xl font-bold">
             <Image

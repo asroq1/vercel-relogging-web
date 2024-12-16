@@ -69,6 +69,7 @@ export default function RootLayout({
             <CommonLayout hasToken={hasToken}>
               {children}
               {modal}
+              <div id="portal-root"></div>
               <Toaster />
             </CommonLayout>
           </ReactQueryProviders>
