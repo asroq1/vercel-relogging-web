@@ -30,11 +30,10 @@ export async function POST(request: Request) {
         body: JSON.stringify({ reason }),
       },
     )
-
     if (!response.ok) {
       throw new Error('신고에 실패했습니다.')
     }
-
+    console.log('✅ next row:', response)
     if (response.status === 401) {
       try {
         // 1. 토큰 재발급 시도
@@ -65,7 +64,6 @@ export async function POST(request: Request) {
         return Response.redirect(new URL('/?auth=login', request.url))
       }
     }
-
     return Response.json({ message: '신고가 완료되었습니다.' })
   } catch (error) {
     console.error('신고 오류:', error)

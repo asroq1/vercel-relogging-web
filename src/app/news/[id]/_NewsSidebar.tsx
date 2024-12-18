@@ -1,8 +1,10 @@
+'use client'
+
 import ContentList from '@/components/ContentList'
 import { useNewsQueries } from '@/hooks/useNewsQueries'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-export default function EventSidebar() {
+export default function NewsSidebar() {
   const router = useRouter()
   // const [currentPage, setCurrentPage] = useState(0) // 초기 페이지 1번으로 설정
   const searchParams = useSearchParams()

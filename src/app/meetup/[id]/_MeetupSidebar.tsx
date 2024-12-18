@@ -1,8 +1,10 @@
+'use client'
+
 import ContentList from '@/components/ContentList'
 import { useMeetupQueries } from '@/hooks/useMeetupList'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-export default function EventSidebar() {
+export default function MeetupSidebar() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const currentPage = Number(searchParams.get('index')) || 0

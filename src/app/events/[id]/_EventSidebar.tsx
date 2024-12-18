@@ -1,3 +1,5 @@
+'use client'
+
 import ContentList from '@/components/ContentList'
 import { useEventsQueries } from '@/hooks/useEventsQueries'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'

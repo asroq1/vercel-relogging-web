@@ -1,20 +1,18 @@
 import { useState } from 'react'
-import ContentList from './ContentList'
+import ContentList from '@/components/ContentList'
 import { useMeetupQueries } from '@/hooks/useMeetupList'
-import { EmptyState } from './status/EmptyStatus'
-import { ErrorAlert } from './status/ErrorAlert'
-import { LoadingSkeleton } from './status/LoadingSkeleton'
+import { EmptyState } from '@/components/status/EmptyStatus'
+import { ErrorAlert } from '@/components/status/ErrorAlert'
+import { LoadingSkeleton } from '@/components/status/LoadingSkeleton'
 import AddIcon from '@/assets/icon_add.svg'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-
-interface RegistNewMeetupButtonProps {
-  tabType: string | null
-}
+import { MeetupFilters } from '@/components/meetup/MeetupFilters'
+import { IRegistNewMeetupButtonProps } from '@/types/IMeetup'
 
 export const RegistNewMeetupButton = ({
   tabType,
-}: RegistNewMeetupButtonProps) => {
+}: IRegistNewMeetupButtonProps) => {
   return (
     <Link
       href={{
@@ -22,7 +20,7 @@ export const RegistNewMeetupButton = ({
         query: { tab: tabType }, // 현재 탭 상태 유지
       }}
       scroll={false}
-      className="flex h-10 w-10 items-center justify-center gap-2 rounded-md bg-green transition-all laptop:w-full laptop:max-w-[200px]"
+      className="flex h-10 min-w-[40px] items-center justify-center gap-2 rounded-md bg-green transition-all laptop:w-[200px]"
     >
       <AddIcon width={20} height={20} color="white"></AddIcon>
       <span className="hidden whitespace-nowrap text-white sm:inline">
@@ -34,15 +32,25 @@ export const RegistNewMeetupButton = ({
 
 export default function MeetupList() {
   const [currentPage, setCurrentPage] = useState(0) // 초기 페이지 1번으로 설정
+  const [region, setRegion] = useState('전체') // 지역 선택
+  const [sortBy, setSortBy] = useState('START_DATE') // 정렬 선택
+  const [progressStatus, setProgressStatus] = useState(false) // 진행중인 모임만 보기
   const pageSize = 15 // 페이지 당 아이템 수
   const searchParams = useSearchParams()
   const currentTab = searchParams.get('tab')
+
   const {
     meetupList,
     meetupListIsLoading,
     meetupListIsError,
     meetupListError,
-  } = useMeetupQueries({ currentPage, pageSize })
+  } = useMeetupQueries({
+    currentPage,
+    pageSize,
+    region,
+    sortBy,
+    progressStatus,
+  })
 
   const handlePageChange = async (newPage: number) => {
     if (newPage < 0) return
@@ -55,7 +63,15 @@ export default function MeetupList() {
   if (meetupListError || !meetupList || meetupListIsError) {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-end">
+        <div className="mb-4 mt-4 flex justify-between">
+          <MeetupFilters
+            setRegion={setRegion}
+            setSortBy={setSortBy}
+            setProgressStatus={setProgressStatus}
+            region={region}
+            sortBy={sortBy}
+            progressStatus={progressStatus}
+          />
           <RegistNewMeetupButton tabType={currentTab || ''} />
         </div>
         <ErrorAlert
@@ -68,7 +84,15 @@ export default function MeetupList() {
   if (meetupList.ploggingMeetupSimpleResponseList.length === 0) {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-end">
+        <div className="mb-4 mt-4 flex justify-between">
+          <MeetupFilters
+            setRegion={setRegion}
+            setSortBy={setSortBy}
+            setProgressStatus={setProgressStatus}
+            region={region}
+            sortBy={sortBy}
+            progressStatus={progressStatus}
+          />
           <RegistNewMeetupButton tabType={currentTab || ''} />
         </div>
         <EmptyState
@@ -81,26 +105,18 @@ export default function MeetupList() {
 
   return (
     <>
-      <div className="mb-4 mt-4 flex justify-between">
+      <div className="mb-4 mt-4 flex justify-between gap-4 overflow-x-auto pb-2 pt-2">
+        <MeetupFilters
+          setRegion={setRegion}
+          setSortBy={setSortBy}
+          setProgressStatus={setProgressStatus}
+          region={region}
+          sortBy={sortBy}
+          progressStatus={progressStatus}
+        />
         <div>
-          {/* TODO: 지역 미지정, 등록순 버튼 추가 */}
-          {/* <Button>지역 미지정</Button> // 
-          <Button>등록순</Button> */}
+          <RegistNewMeetupButton tabType={currentTab || ''} />
         </div>
-        {/* <Link
-          href={{
-            pathname: '/meetup/new',
-            query: { tab: currentTab }, // 현재 탭 상태 유지
-          }}
-          scroll={false}
-          className="flex h-10 w-10 items-center justify-center gap-2 rounded-md bg-green transition-all laptop:w-full laptop:max-w-[200px]"
-        >
-          <AddIcon width={20} height={20} color="white"></AddIcon>
-        <RegistNewMeetupButton tabType={currentTab || ''} />
-            새 모임 등록하기
-          </span>
-        </Link> */}
-        <RegistNewMeetupButton tabType={currentTab || ''} />
       </div>
       <ContentList
         contentData={meetupList?.ploggingMeetupSimpleResponseList}

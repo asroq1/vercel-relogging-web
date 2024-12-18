@@ -16,7 +16,11 @@ export interface ImeetupQueries {
   currentPage?: number
   pageSize?: number
   meetupId?: string
+  region?: string | undefined
+  sortBy?: string | undefined
+  progressStatus?: boolean
 }
+
 export interface IMeetupContentCard {
   id: number
   title: string
@@ -45,4 +49,17 @@ export interface IMeetupListResponse {
   totalPage: number
   totalElements: number
   ploggingMeetupSimpleResponseList: IMeetupContentCard[]
+}
+
+export interface IRegistNewMeetupButtonProps {
+  tabType: string | null
+}
+
+export interface IMeetupFiltersProps {
+  setRegion: (region: string) => void
+  setSortBy: (sortBy: string) => void
+  setProgressStatus: (status: boolean) => void
+  region: string
+  sortBy: string
+  progressStatus?: boolean
 }

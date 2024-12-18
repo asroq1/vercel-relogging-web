@@ -35,6 +35,13 @@ import { useState } from 'react'
 import Image from 'next/image'
 import IconGarbage from '@/assets/icon_garbage.svg'
 import { useCreateMeetupQueries } from '@/hooks/useMeetupList'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 const MeetupFormSchema = z
   .object({
@@ -90,8 +97,8 @@ export default function MeetupFormModal() {
       content: '',
       location: '',
       region: '',
-      startDate: null as unknown as Date,
-      endDate: null as unknown as Date,
+      startDate: new Date(),
+      endDate: new Date(),
       participantTarget: '',
       activityHours: '',
       contactPerson: '',
@@ -210,99 +217,153 @@ export default function MeetupFormModal() {
           >
             <div className="w-full max-w-full px-6 pb-4">
               <div className="w-full space-y-6">
-                {/* 모임 이름 필드 */}
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem className="w-full space-y-2">
-                      <FormLabel>
-                        모임 이름 <span className="text-green">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="크루모임의 이름을 적어주세요"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* 모임소개 및 활동목적 필드 */}
-                <FormField
-                  control={form.control}
-                  name="content"
-                  render={({ field }) => (
-                    <FormItem className="w-full space-y-2">
-                      <FormLabel>
-                        모임 소개 및 활동 목적
-                        <span className="text-green">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="모임의 취지, 특성 등 100자 이내로 소개해주세요."
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* 지역 필드 */}
-                <FormField
-                  control={form.control}
-                  name="region"
-                  render={({ field }) => (
-                    <FormItem className="w-full space-y-2">
-                      <FormLabel>
-                        지역 <span className="text-green">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="예: 서울시 강남구" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* 지원 내용 필드 */}
-                <FormField
-                  control={form.control}
-                  name="supportDetails"
-                  render={({ field }) => (
-                    <FormItem className="w-full space-y-2">
-                      <FormLabel>
-                        지원 내용 <span className="text-green">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="예: 지원 내용을 적어주세요."
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* 활동 장소 필드 */}
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem className="w-full space-y-2">
-                      <FormLabel>
-                        활동 장소 <span className="text-green">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="예: 을지로입구역 4번출국 00카페"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="space-y-2">
+                  {/* 모임 이름 필드 */}
+                  <FormLabel>
+                    모임 이름 <span className="text-green">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="크루모임의 이름을 적어주세요"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/* 모임소개 및 활동목적 필드 */}
+                  <FormLabel>
+                    모임 소개 및 활동 목적
+                    <span className="text-green">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="모임의 취지, 특성 등 100자 이내로 소개해주세요."
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/* 지역 필드 */}
+                  <FormLabel>
+                    지역 <span className="text-green">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="region"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="지역을 선택해주세요" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="전체">
+                              지역 미지정 (전체)
+                            </SelectItem>
+                            <SelectItem value="서울특별시">
+                              서울특별시
+                            </SelectItem>
+                            <SelectItem value="경기도">경기도</SelectItem>
+                            <SelectItem value="부산광역시">
+                              부산광역시
+                            </SelectItem>
+                            <SelectItem value="인천광역시">
+                              인천광역시
+                            </SelectItem>
+                            <SelectItem value="대구광역시">
+                              대구광역시
+                            </SelectItem>
+                            <SelectItem value="대전광역시">
+                              대전광역시
+                            </SelectItem>
+                            <SelectItem value="광주광역시">
+                              광주광역시
+                            </SelectItem>
+                            <SelectItem value="울산광역시">
+                              울산광역시
+                            </SelectItem>
+                            <SelectItem value="제주특별자치도">
+                              제주특별자치도
+                            </SelectItem>
+                            <SelectItem value="세종특별자치시">
+                              세종특별자치시
+                            </SelectItem>
+                            <SelectItem value="경상도">경상도</SelectItem>
+                            <SelectItem value="충청도">충청도</SelectItem>
+                            <SelectItem value="전라도">전라도</SelectItem>
+                            <SelectItem value="강원도">강원도</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/* 지원 내용 필드 */}
+                  <FormLabel>
+                    지원 내용 <span className="text-green">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="supportDetails"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="예: 지원 내용을 적어주세요."
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/* 활동 장소 필드 */}
+                  <FormLabel>
+                    활동 장소 <span className="text-green">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="예: 을지로입구역 4번출국 00카페"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 {/* 날짜 선택 필드 */}
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">
@@ -373,106 +434,116 @@ export default function MeetupFormModal() {
                     />
                   </div>
                 </div>
-                {/* 모임원 자격 필드 */}
-                <FormField
-                  control={form.control}
-                  name="participantTarget"
-                  render={({ field }) => (
-                    <FormItem className="w-full space-y-2">
-                      <FormLabel>
-                        모임원 자격
-                        <span className="text-green">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="예: 환경 이슈에 관심이 많은 30대"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/*       활동시간 필드 */}
-                <FormField
-                  control={form.control}
-                  name="activityHours"
-                  render={({ field }) => (
-                    <FormItem className="w-full space-y-2">
-                      <FormLabel>
-                        활동 시간
-                        <span className="text-green">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="1회 당 모임 시간을 입력해주세요. 예: 2시간"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/*       담당자 필드 */}
-                <FormField
-                  control={form.control}
-                  name="contactPerson"
-                  render={({ field }) => (
-                    <FormItem className="w-full space-y-2">
-                      <FormLabel>
-                        담당자
-                        <span className="text-green">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="이름을 적어주세요. 예: 홍길동"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* 연락처 필드 */}
-                <FormField
-                  control={form.control}
-                  name="contactNumber"
-                  render={({ field }) => (
-                    <FormItem className="w-full space-y-2">
-                      <FormLabel>
-                        연락처
-                        <span className="text-green">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="연락받을 번호를 적어주세요. 예: 010-1234-5678"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* 지원링크 필드 */}
-                <FormField
-                  control={form.control}
-                  name="registrationLink"
-                  render={({ field }) => (
-                    <FormItem className="w-full space-y-2">
-                      <FormLabel>
-                        지원 링크
-                        <span className="text-green">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="지원받을 채널의 링크를 붙여넣어주세요. "
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="space-y-2">
+                  {/* 모임원 자격 필드 */}
+                  <FormLabel>
+                    모임원 자격
+                    <span className="text-green">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="participantTarget"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="예: 환경 이슈에 관심이 많은 30대"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/* 활동시간 필드 */}
+                  <FormLabel>
+                    활동 시간
+                    <span className="text-green">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="activityHours"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="1회 당 모임 시간을 입력해주세요. 예: 2시간"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/*       담당자 필드 */}
+                  <FormLabel>
+                    담당자
+                    <span className="text-green">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="contactPerson"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="이름을 적어주세요. 예: 홍길동"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/* 연락처 필드 */}
+                  <FormLabel>
+                    연락처
+                    <span className="text-green">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="contactNumber"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="연락받을 번호를 적어주세요. 예: 010-1234-5678"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/* 지원링크 필드 */}
+                  <FormLabel>
+                    지원 링크
+                    <span className="text-green">*</span>
+                  </FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="registrationLink"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="지원받을 채널의 링크를 붙여넣어주세요. "
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 {/* 이미지 업로드 섹션 */}
                 <div className="w-full space-y-2">
                   <div className="flex items-center justify-between">

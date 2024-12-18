@@ -2,6 +2,9 @@ export interface IEventsQueries {
   currentPage?: number
   pageSize?: number
   eventId?: string
+  region?: string | undefined
+  sortBy?: string | undefined
+  progressStatus?: boolean
 }
 
 export type EventDetailType = 'prev' | 'next'

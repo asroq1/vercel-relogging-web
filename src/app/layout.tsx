@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/toaster'
 import '@/styles/globals.css'
 import { cookies } from 'next/headers'
 import LoadingScreen from '@/components/layouts/LoadingScreen'
+import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
   title: {
@@ -63,6 +64,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-white">
+        <Analytics />
         <Suspense fallback={<LoadingScreen />}>
           <ReactQueryProviders>
             <MswComponent />

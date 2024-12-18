@@ -114,7 +114,7 @@ const CommentItem = ({
 
   const handleReportSubmit = async (reason: string) => {
     try {
-      const response = await fetch(`/api/report`, {
+      const response = await fetch(`/api/report?commentId=${comment.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

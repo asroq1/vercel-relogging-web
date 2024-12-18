@@ -3,11 +3,26 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { toast } from '@/hooks/use-toast'
 
-export async function fetchMeetupingArticle(page: number, size: number) {
-  const params = new URLSearchParams()
-  params.append('page', page.toString())
-  params.append('size', size.toString())
-  params.append('sort', 'desc')
+export async function fetchMeetupingArticle(
+  page: number,
+  pageSize: number,
+  region?: string,
+  progressStatus = false,
+  sortBy = 'START_DATE',
+  sortDirection = 'DESC',
+) {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    pageSize: pageSize.toString(),
+    isOpen: progressStatus.toString(),
+    sortBy,
+    sortDirection,
+    ...(region && { region }), // region이 있을 때만 추가
+  })
+
+  // params.append('isOpen', progressStatus.toString())
+  // params.append('sortBy', sortBy)
+  // params.append('sortDirection', sortDirection)
 
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/ploggingMeetups/list?${params.toString()}`
 
@@ -39,13 +54,33 @@ export const useMeetupQueries = ({
   currentPage,
   pageSize,
   meetupId,
+  region,
+  sortBy,
+  progressStatus,
 }: ImeetupQueries) => {
   const queryClient = useQueryClient()
   const router = useRouter()
 
+  if (region === '전체') region = undefined
   const meetupListQuery = useQuery<IMeetupListResponse>({
-    queryKey: ['meetupList', currentPage, pageSize],
-    queryFn: () => fetchMeetupingArticle(currentPage ?? 0, pageSize ?? 15),
+    queryKey: [
+      'meetupList',
+      currentPage,
+      pageSize,
+      currentPage,
+      pageSize,
+      region,
+      sortBy,
+      progressStatus,
+    ],
+    queryFn: () =>
+      fetchMeetupingArticle(
+        currentPage ?? 0,
+        pageSize ?? 15,
+        region,
+        progressStatus,
+        sortBy,
+      ),
   })
 
   const meetupDetailQuery = useQuery({

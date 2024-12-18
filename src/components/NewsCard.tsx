@@ -31,7 +31,7 @@ const NewsCard = ({ article, styleType, currentPage }: IEventCardProps) => {
   return (
     //카드 컨테이너
     <Card
-      className={`flex aspect-[378/175] min-h-[200px] w-full cursor-pointer flex-col overflow-hidden p-4 transition-shadow duration-300 hover:shadow-lg laptop:min-h-[200px] laptop:max-w-[378px] ${
+      className={`flex aspect-[378/175] min-h-[200px] w-full cursor-pointer flex-col gap-4 overflow-hidden p-4 transition-shadow duration-300 hover:shadow-lg laptop:min-h-[200px] laptop:max-w-[378px] ${
         isClicked
           ? 'border-2 border-green bg-green/5 shadow-md'
           : 'hover:shadow-lg'
