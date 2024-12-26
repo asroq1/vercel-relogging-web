@@ -17,7 +17,7 @@ export default function EventListGrid() {
     useEventsQueries({ currentPage, pageSize, region, sortBy, progressStatus })
 
   const handlePageChange = async (newPage: number) => {
-    console.log(newPage)
+
     if (newPage < 0) return
     if (eventsList?.totalPages && newPage >= eventsList.totalPages) return
     setCurrentPage(newPage)

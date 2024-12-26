@@ -92,7 +92,6 @@ export const useNewsQueries = ({
     },
     onSuccess: (news) => {
       // URL 업데이트
-      console.log('뉴스', news.data.id)
       router.push(`/news/${news.data.id}`)
     },
   })

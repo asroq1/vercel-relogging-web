@@ -63,7 +63,7 @@ export default function RootLayout({
 
   return (
     <html lang="ko">
-      <body className="bg-white">
+      <body suppressHydrationWarning className="bg-white">
         <Analytics />
         <Suspense fallback={<LoadingScreen />}>
           <ReactQueryProviders>

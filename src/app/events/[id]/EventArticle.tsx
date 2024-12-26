@@ -9,7 +9,6 @@ import LabeledContent from '@/components/LabeledContent'
 import { ErrorAlert } from '@/components/status/ErrorAlert'
 import { LoadingSkeleton } from '@/components/status/LoadingSkeleton'
 import ContentList from '@/components/ContentList'
-import { getRandomDefaultImage } from '@/constans/images'
 import LocationIcon from '@/assets/icon_location.svg'
 import {
   Carousel,
@@ -23,6 +22,7 @@ import {
   IEventContentCarouselProps,
   IEventDetailSectionProps,
 } from '@/types/IEvent'
+import { DEFAULT_IMAGES } from '@/constans/images'
 
 function ImageListCarousel({ imageList }: IEventContentCarouselProps) {
   return (
@@ -34,7 +34,7 @@ function ImageListCarousel({ imageList }: IEventContentCarouselProps) {
               <Card>
                 <CardContent className="flex aspect-square items-center justify-center p-6">
                   <Image
-                    src={image.url ?? getRandomDefaultImage()}
+                    src={image.url ?? DEFAULT_IMAGES.THUMBNAIL}
                     alt="Plogging eventDetail main image"
                     width={1920}
                     height={1080}
@@ -114,7 +114,7 @@ const EventDetailSection = ({
             src={
               eventDetail?.imageList.length > 0
                 ? eventDetail?.imageList[0]?.url
-                : getRandomDefaultImage()
+                : DEFAULT_IMAGES.THUMBNAIL
             }
             alt={eventDetail?.imageList[0]?.caption ?? '플로깅 이미지'}
             width={1920}

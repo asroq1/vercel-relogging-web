@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     if (!response.ok) {
       throw new Error('신고에 실패했습니다.')
     }
-    console.log('✅ next row:', response)
+    console.error('✅ next row:', response)
     if (response.status === 401) {
       try {
         // 1. 토큰 재발급 시도
@@ -50,9 +50,9 @@ export async function POST(request: Request) {
             body: JSON.stringify({ reason }),
           },
         )
-        console.log('토큰 갱신 후 재요청1:', retryResponse)
+        console.error('토큰 갱신 후 재요청1:', retryResponse)
         if (!retryResponse.ok) {
-          console.log('토큰 갱신 후 재요청2', retryResponse)
+          console.error('토큰 갱신 후 재요청2', retryResponse)
           const url = request.url
           return Response.redirect(new URL('/?auth=login', url))
         }

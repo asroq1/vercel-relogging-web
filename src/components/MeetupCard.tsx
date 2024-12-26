@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
-import { getRandomDefaultImage } from '@/constans/images'
 import { IMeetupContentCard } from '@/types/IMeetup'
 import IconTime from '@/assets/icon_time.svg'
 import IconLocation from '@/assets/icon_location.svg'
 import dayjs from 'dayjs'
+import { DEFAULT_IMAGES } from '@/constans/images'
 
 interface IMeetupCardProps {
   meetupData: IMeetupContentCard
@@ -61,7 +61,7 @@ export const MeetupCard = ({
 
           <div className="relative h-[100px] w-full rounded-lg md:flex-[4]">
             <Image
-              src={meetupData.imageUrl ?? getRandomDefaultImage()}
+              src={meetupData.imageUrl ?? DEFAULT_IMAGES.THUMBNAIL}
               alt={meetupData.title}
               fill
               priority

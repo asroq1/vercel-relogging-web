@@ -25,7 +25,6 @@ export const handlers = [
     //  TODO: 5초 대기 지우기
     // await delay(3000)
 
-    console.log('request', request)
     const url = new URL(request.url)
     const page = parseInt(url.searchParams.get('page') || '0')
     const pageSize = parseInt(url.searchParams.get('pageSize') || '9')
@@ -128,8 +127,6 @@ export const handlers = [
 
   // 플로깅 밋업 mock logic
   http.get('/api/ploggingMeetups/list', async ({ request }) => {
-    //  TODO: 5초 대기 지우기
-    console.log('프론트 요청', request)
     // await delay(3000)
     const url = new URL(request.url)
     const page = parseInt(url.searchParams.get('page') || '0')

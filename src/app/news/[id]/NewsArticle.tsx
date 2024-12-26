@@ -1,7 +1,6 @@
 'use client'
 
 import HomeButton from '@/components/HomeButton'
-import { getRandomDefaultImage } from '@/constans/images'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -14,6 +13,7 @@ import { ErrorAlert } from '@/components/status/ErrorAlert'
 import ContentList from '@/components/ContentList'
 import { useToast } from '@/hooks/use-toast'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import { DEFAULT_IMAGES } from '@/constans/images'
 
 const EventDetailSection = ({
   newsDetail,
@@ -65,7 +65,7 @@ const EventDetailSection = ({
       </div>
       <div className="mb-2">
         <Image
-          src={newsDetail?.imagePath ?? getRandomDefaultImage()}
+          src={newsDetail?.imagePath ?? DEFAULT_IMAGES.THUMBNAIL}
           alt="Article main image"
           width={1920}
           height={1080}

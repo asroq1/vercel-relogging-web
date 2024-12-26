@@ -34,7 +34,7 @@ export function MyPageModal() {
       }}
       title={`${user?.name} 님`}
       closeButtonLabel="로그아웃"
-      className="flex h-dvh w-full flex-col justify-center bg-white laptop:max-h-[280px] laptop:max-w-[368px]"
+      className="flex h-dvh w-full flex-col justify-center bg-white tablet:max-h-[280px] tablet:max-w-[368px] laptop:max-h-[280px] laptop:max-w-[368px]"
       buttonClassName="border-none  justify-end text-base text-textStrong bg-white font-normal"
     >
       <button

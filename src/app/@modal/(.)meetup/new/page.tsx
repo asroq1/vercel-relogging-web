@@ -151,7 +151,7 @@ export default function MeetupFormModal() {
   }
 
   const handleSubmit = async (data: z.infer<typeof MeetupFormSchema>) => {
-    console.log('Form submitted with data:', data) // 폼 제출 확인용 로그
+    
 
     try {
       const formData = new FormData()

@@ -42,9 +42,9 @@ export async function POST(request: Request) {
             body: formData,
           },
         )
-        console.log('토큰 갱신 후 재요청1:', retryResponse)
+        console.error('토큰 갱신 후 재요청1:', retryResponse)
         if (!retryResponse.ok) {
-          console.log('토큰 갱신 후 재요청2', retryResponse)
+          console.error('토큰 갱신 후 재요청2', retryResponse)
           const url = request.url
           return Response.redirect(new URL('/?auth=login', url))
         }
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
         const responseData = await retryResponse.json()
         return Response.json(responseData)
       } catch (error) {
-        console.log('토큰 갱신 후 재요청3', error)
+        console.error('토큰 갱신 후 재요청3', error)
         return Response.redirect(new URL('/?auth=login', request.url))
       }
     }

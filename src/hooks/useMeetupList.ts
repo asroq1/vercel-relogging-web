@@ -190,7 +190,6 @@ export const useCreateMeetupQueries = () => {
       return response.json()
     },
     onSuccess: () => {
-      console.log('모임 등록 성공')
       queryClient.invalidateQueries({ queryKey: ['meetups'] })
       toast({
         title: '모임 등록 성공',

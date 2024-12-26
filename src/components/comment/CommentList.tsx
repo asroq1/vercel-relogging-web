@@ -122,7 +122,6 @@ const CommentItem = ({
         body: JSON.stringify({ reason }),
       })
 
-      console.log('신고 응답:', response)
 
       if (response.status === 302) {
         window.location.href = `${window.location.pathname}?auth=login`

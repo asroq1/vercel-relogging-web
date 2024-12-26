@@ -14,12 +14,12 @@ import { LoadingSkeleton } from '@/components/status/LoadingSkeleton'
 import { Card, CardContent } from '@/components/ui/card'
 import HomeButton from '@/components/HomeButton'
 import Image from 'next/image'
-import { getRandomDefaultImage } from '@/constans/images'
 import { linkifyContent } from '@/utils/linkifyContent'
 import LocationIcon from '@/assets/icon_location.svg'
 import LabeledContent from '@/components/LabeledContent'
 import CommentSection from '@/components/comment/CommentSection'
 import { useEventsQueries } from '@/hooks/useEventsQueries'
+import { DEFAULT_IMAGES } from '@/constans/images'
 
 function ImageListCarousel({ imageList }: IEventContentCarouselProps) {
   return (
@@ -31,7 +31,7 @@ function ImageListCarousel({ imageList }: IEventContentCarouselProps) {
               <Card>
                 <CardContent className="flex aspect-square items-center justify-center p-6">
                   <Image
-                    src={image.url ?? getRandomDefaultImage()}
+                    src={image.url ?? DEFAULT_IMAGES.THUMBNAIL}
                     alt="Plogging eventDetail main image"
                     width={1920}
                     height={1080}

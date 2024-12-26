@@ -15,7 +15,7 @@ const CommentSection = ({
   refetchEventDetail: () => void
   contentType: ContentType
 }) => {
-  console.log('✅ event detailconut', eventDetail)
+ 
   return (
     <article>
       <h2 className="text-2xl font-semibold">댓글</h2>

@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   const contentType = searchParams.get('contentType')
   const eventId = searchParams.get('eventId')
   const commentId = searchParams.get('commentId')
-  
+
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/${contentType}/${eventId}/comments${commentId ? `/${commentId}/replies` : ''}`,
@@ -50,9 +50,9 @@ export async function POST(request: Request) {
             body: JSON.stringify({ content }),
           },
         )
-        console.log('토큰 갱신 후 재요청1:', retryResponse)
+        console.error('토큰 갱신 후 재요청1:', retryResponse)
         if (!retryResponse.ok) {
-          console.log('토큰 갱신 후 재요청2', retryResponse)
+          console.error('토큰 갱신 후 재요청2', retryResponse)
           const url = request.url
           return Response.redirect(new URL('/?auth=login', url))
         }
@@ -60,12 +60,12 @@ export async function POST(request: Request) {
         const responseData = await retryResponse.json()
         return Response.json(responseData)
       } catch (error) {
-        console.log('토큰 갱신 후 재요청3', error)
+        console.error('토큰 갱신 후 재요청3', error)
         return Response.redirect(new URL('/?auth=login', request.url))
       }
     }
     const responseData = await response.json()
-    console.log('responseData', responseData)
+    console.error('responseData', responseData)
     return Response.json(responseData)
   } catch (error) {
     console.error('Error:', error)
@@ -105,7 +105,7 @@ export async function DELETE(request: Request) {
     // ... 나머지 토큰 갱신 로직은 동일
     if (response.status === 401) {
       try {
-        console.log('✅ step3')
+        console.error('✅ step3')
         // 1. 토큰 재발급 시도
         const newToken = await refreshToken()
         // 2. 원래 요청 재시도
@@ -119,9 +119,9 @@ export async function DELETE(request: Request) {
             },
           },
         )
-        console.log('토큰 갱신 후 재요청1:', retryResponse)
+        console.error('토큰 갱신 후 재요청1:', retryResponse)
         if (!retryResponse.ok) {
-          console.log('토큰 갱신 후 재요청2', retryResponse)
+          console.error('토큰 갱신 후 재요청2', retryResponse)
           const url = request.url
           return Response.redirect(new URL('/?auth=login', url))
         }
@@ -129,7 +129,7 @@ export async function DELETE(request: Request) {
         const responseData = await retryResponse.json()
         return Response.json(responseData)
       } catch (error) {
-        console.log('토큰 갱신 후 재요청3', error)
+        console.error('토큰 갱신 후 재요청3', error)
         return Response.redirect(new URL('/?auth=login', request.url))
       }
     }
@@ -197,9 +197,9 @@ export async function PUT(request: Request) {
             body: JSON.stringify({ content }),
           },
         )
-        console.log('토큰 갱신 후 재요청1:', retryResponse)
+        console.error('토큰 갱신 후 재요청1:', retryResponse)
         if (!retryResponse.ok) {
-          console.log('토큰 갱신 후 재요청2', retryResponse)
+          console.error('토큰 갱신 후 재요청2', retryResponse)
           const url = request.url
           return Response.redirect(new URL('/?auth=login', url))
         }
@@ -207,7 +207,7 @@ export async function PUT(request: Request) {
         const responseData = await retryResponse.json()
         return Response.json(responseData)
       } catch (error) {
-        console.log('토큰 갱신 후 재요청3', error)
+        console.error('토큰 갱신 후 재요청3', error)
         return Response.redirect(new URL('/?auth=login', request.url))
       }
     }

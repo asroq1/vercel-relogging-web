@@ -30,7 +30,6 @@ export const useOAuth = () => {
     onSuccess: async (data) => {
       // Server Action 호출
       await setToken(data.accessToken)
-      console.log('✅data.userResponse', data.userResponse)
       setAuth(data.userResponse)
       router.replace('/')
     },
