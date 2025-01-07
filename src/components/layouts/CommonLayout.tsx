@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import '@/styles/globals.css'
 import Link from 'next/link'
 import Image from 'next/image'
-import { LoginModal } from '@/components/modal/LoginModal'
-import { MyPageModal } from '@/components/modal/MyPageModal'
 import { AuthButtons } from '../AuthButtons'
+import LayoutModalContainer from '@/components/modal/LayoutModalContainer'
 
 export const metadata: Metadata = {
   title: 'Relogging',
@@ -40,8 +39,9 @@ export function CommonLayout({
               <MobileNav />
             </div> */}
       </nav>
-      <LoginModal />
-      <MyPageModal />
+
+      <LayoutModalContainer />
+
       <main>{children}</main>
       {/* <footer>푸터</footer> */}
     </>

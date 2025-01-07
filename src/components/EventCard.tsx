@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card'
 import dayjs from 'dayjs'
 import IconTime from '@/assets/icon_time.svg'
 import IconLocation from '@/assets/icon_location.svg'
-import { DEFAULT_IMAGES } from '@/constans/images'
+import { DEFAULT_IMAGES, BLUR_IMAGES } from '@/constans/images'
 
 interface IEventCardProps {
   eventData: IEventContentCard
@@ -68,7 +68,10 @@ export const EventCard = ({
               alt={eventData.caption ?? '플로깅 이미지'}
               fill
               priority
+              quality={75}
+              placeholder="blur"
               sizes="w-100 h-100"
+              blurDataURL={BLUR_IMAGES.THUMBNAIL}
               className="rounded-lg object-cover"
             />
           </div>

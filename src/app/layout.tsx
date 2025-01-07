@@ -12,29 +12,57 @@ import { Analytics } from '@vercel/analytics/react'
 export const metadata: Metadata = {
   title: {
     template: '%s | 리로깅',
-    default: '리로깅 - 플로깅 정보 모음 플랫폼',
+    default: '리로깅 - 대한민국 1등 플로깅 정보 커뮤니티 플랫폼',
   },
   description:
-    '리로깅은 플로거들에게 다양한 환경뉴스 및 지자체 플로깅 정보를 제공하고, 플로거들간 커뮤니티가 활성화될 수 있도록 돕습니다.',
+    '리로깅에서 다양한 플로깅 모임과 환경 뉴스를 만나보세요. 플로깅 일정, 장소, 커뮤니티 정보부터 환경보호 활동까지 한눈에 확인할 수 있습니다. 함께 달리며 환경을 보호하는 플로거들의 공간, 리로깅입니다.',
   icons: {
     icon: '/icon.ico', // 기본 파비콘
+    apple: '/icon.ico', // Apple 터치 아이콘
+    shortcut: '/icon.ico', // IE용 아이콘
   },
-  keywords: ['플로깅', '환경', '운동', '커뮤니티'],
-  authors: [{ name: '리로깅' }],
+  keywords: [
+    '플로깅',
+    '조깅',
+    '환경보호',
+    '쓰레기줍기',
+    '러닝',
+    '환경운동',
+    '환경뉴스',
+    '플로깅모임',
+    '지역플로깅',
+    '건강운동',
+    '환경커뮤니티',
+    '플로거',
+    '친환경활동',
+    '자원봉사',
+    '지역봉사',
+  ],
+  authors: [{ name: '리로깅', url: 'https://re-logging.com' }],
+  creator: '리로깅',
+  publisher: '리로깅',
+  category: '환경,운동,커뮤니티',
   openGraph: {
-    title: '리로깅 - 플로깅 정보 모음 플랫폼',
-    description: '플로깅 커뮤니티 플랫폼',
+    title: '리로깅 - 대한민국 대표 플로깅 커뮤니티',
+    description:
+      '플로깅 모임부터 환경 뉴스까지, 플로거들을 위한 모든 것. 지금 리로깅에서 시작하세요.',
     url: 'https://re-logging.com',
     siteName: '리로깅',
     images: [
       {
-        url: '/logo-navi.png',
-        width: 1200,
-        height: 630,
+        url: '/mobileBanner.png',
+        width: 720,
+        height: 377,
       },
     ],
     locale: 'ko_KR',
     type: 'website',
+  },
+  twitter: {
+    // 트위터 공유 시 표시
+    card: 'summary_large_image',
+    title: '리로깅 - 플로깅 커뮤니티 플랫폼',
+    images: ['/logo-navi.png'],
   },
   robots: {
     index: true,
@@ -49,6 +77,11 @@ export const metadata: Metadata = {
     other: {
       'naver-site-verification': '55ea3a8517a9555d04a650fa50c51607faafecb9',
     },
+  },
+  other: {
+    'format-detection': 'telephone=no',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black',
   },
 }
 

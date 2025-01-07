@@ -5,7 +5,7 @@ import { IMeetupContentCard } from '@/types/IMeetup'
 import IconTime from '@/assets/icon_time.svg'
 import IconLocation from '@/assets/icon_location.svg'
 import dayjs from 'dayjs'
-import { DEFAULT_IMAGES } from '@/constans/images'
+import { DEFAULT_IMAGES, BLUR_IMAGES } from '@/constans/images'
 
 interface IMeetupCardProps {
   meetupData: IMeetupContentCard
@@ -65,7 +65,10 @@ export const MeetupCard = ({
               alt={meetupData.title}
               fill
               priority
+              quality={75}
+              placeholder="blur"
               sizes="w-100 h-100"
+              blurDataURL={BLUR_IMAGES.THUMBNAIL}
               className="rounded-lg object-cover"
             />
           </div>

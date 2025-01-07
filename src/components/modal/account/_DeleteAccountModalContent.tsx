@@ -9,10 +9,11 @@ import { DeleteAccountActions } from './_AccountActions'
 // components/account/modal/DeleteAccountModalContent.tsx
 interface DeleteAccountModalProps {
   onCancel: () => void
+  onTypeChange: (type: 'main' | 'edit' | 'delete') => void
 }
 
 export const DeleteAccountModalContent = React.memo(
-  ({ onCancel }: DeleteAccountModalProps) => {
+  ({ onCancel, onTypeChange }: DeleteAccountModalProps) => {
     const [reason, setReason] = useState('')
     const { deleteAccount } = useUpdateAccount()
     const { toast } = useToast()
@@ -25,9 +26,7 @@ export const DeleteAccountModalContent = React.memo(
     )
 
     const handleDeleteSubmit = async () => {
-      console.log('실행1')
       if (deleteAccount.isPending) return
-      console.log('실행2')
 
       try {
         await deleteAccount.mutateAsync()
@@ -66,6 +65,7 @@ export const DeleteAccountModalContent = React.memo(
           <DeleteAccountActions
             onSubmit={handleDeleteSubmit}
             onCancel={onCancel}
+            onTypeChange={() => onTypeChange('main')}
             isSubmitting={deleteAccount.isPending}
           />
         </div>

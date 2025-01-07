@@ -33,8 +33,6 @@ const nextConfig = {
   },
   images: {
     domains: [
-      'picsum.photos',
-      'avatars.githubusercontent.com',
       'loremflickr.com',
       'cdn.hkbs.co.kr',
       'cdn.esgeconomy.com',
@@ -58,15 +56,7 @@ const nextConfig = {
       },
     ],
   },
-  // TODO 공식 배포 이전에 삭제하기
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://test.re-logging.com/api/:path*', // HTTP 백엔드 URL
-      },
-    ]
-  },
+
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>

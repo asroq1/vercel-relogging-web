@@ -6,8 +6,9 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import MeetupList from '@/components/meetup/MeetupList'
 import EventListGrid from '@/components/event/EventListGrid'
 import NewsListGrid from '@/components/NewsListGrid'
+import { BLUR_IMAGES } from '@/constans/images'
 
-const images = {
+const BlurImages = {
   mobile: {
     src: '/mobileBanner.png',
     width: 500,
@@ -55,28 +56,34 @@ export default function Home() {
     <div className="h-full w-full bg-background">
       <section className="margin-auto hidden w-dvw laptop:block">
         <Image
-          {...images.desktop}
+          {...BlurImages.desktop}
           alt="로고 이미지"
           priority
+          placeholder="blur"
           sizes="(min-width: 1200px) 100vw"
+          blurDataURL={BLUR_IMAGES.THUMBNAIL}
           className="h-auto max-h-[548px] w-full object-cover"
         />
       </section>
       <section className="hidden tablet:block laptop:hidden">
         <Image
-          {...images.tablet}
+          {...BlurImages.tablet}
           alt="로고 이미지"
           priority
+          placeholder="blur"
           sizes="(min-width: 600px) and (max-width: 1199px) 100vw"
+          blurDataURL={BLUR_IMAGES.THUMBNAIL}
           className="h-auto max-h-[548px] w-full object-cover"
         />
       </section>
       <section className="block tablet:hidden">
         <Image
-          {...images.mobile}
+          {...BlurImages.mobile}
           alt="로고 이미지"
           priority
+          placeholder="blur"
           sizes="(max-width: 599px) 100vw  max-h-[700px]"
+          blurDataURL={BLUR_IMAGES.THUMBNAIL}
           className="h-auto max-h-[548px] w-full object-cover"
         />
       </section>

@@ -2,7 +2,7 @@ import { NewsArticleCard } from '@/types/INews'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { DEFAULT_IMAGES } from '@/constans/images'
+import { DEFAULT_IMAGES, BLUR_IMAGES } from '@/constans/images'
 
 interface IEventCardProps {
   article: NewsArticleCard
@@ -58,6 +58,9 @@ const NewsCard = ({ article, styleType, currentPage }: IEventCardProps) => {
             alt={article?.title}
             fill
             priority
+            quality={75}
+            placeholder="blur"
+            blurDataURL={BLUR_IMAGES.THUMBNAIL}
             sizes="w-100 h-100"
             className="rounded-lg"
           />

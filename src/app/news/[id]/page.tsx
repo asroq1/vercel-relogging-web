@@ -12,27 +12,62 @@ export async function generateMetadata({
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/newsArticles/${params.id}`,
   )
   const newsDetail = await response.json()
-
+  // 키워드 생성
+  const keywords = [
+    '환경뉴스',
+    '플로깅',
+    '환경보호',
+    newsDetail.title,
+    '환경이슈',
+    '지속가능',
+    '친환경',
+    '기후변화',
+    '탄소중립',
+    newsDetail.category,
+  ].filter(Boolean)
+  // 설명 구성
+  const description = `
+   ${newsDetail.title} - ${newsDetail.aiSummary}
+   🏷️ 카테고리: ${newsDetail.category}
+   환경 뉴스 더 알아보기
+ `.trim()
   return {
-    title: `리로깅 - ${newsDetail.title ?? ''}`,
-    description: `리로깅 - ${newsDetail.aiSummary ?? ''}`,
+    title: `${newsDetail.title} | 환경 뉴스 | 리로깅`,
+    description,
+    keywords,
+
     openGraph: {
-      title: `리로깅 - ${newsDetail.title ?? ''}`,
-      description: `리로깅 - ${newsDetail.aiSummary ?? ''}`,
+      title: `${newsDetail.title} - 환경 뉴스`,
+      description: newsDetail.aiSummary,
+      type: 'article',
+      url: `https://re-logging.com/news/${params.id}`,
       images: [
         {
           url: newsDetail?.imagePath ?? '',
-          width: 1200,
-          height: 630,
-          alt: `리로깅 - ${newsDetail.imageCaption ?? ''}`,
+          width: 720,
+          height: 377,
+          alt: newsDetail.imageCaption || '환경 뉴스 이미지',
         },
       ],
+      locale: 'ko_KR',
+      siteName: '리로깅',
     },
+
     twitter: {
       card: 'summary_large_image',
-      title: `리로깅 - ${newsDetail.title ?? ''}`,
-      description: `리로깅 - ${newsDetail.aiSummary ?? ''}`,
+      title: newsDetail.title,
+      description: newsDetail.aiSummary,
       images: [newsDetail?.imagePath ?? ''],
+      creator: '@리로깅',
+      site: '@리로깅',
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
   }
 }

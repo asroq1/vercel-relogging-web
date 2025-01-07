@@ -2,21 +2,24 @@
 
 import { CommonModal } from '@/components/modal/CommonModal'
 import { useStatusModal } from '@/hooks/useStatusModal'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import ProfileIcon from '@/assets/icon_profile.svg'
 import SettingIcon from '@/assets/icon_setting.svg'
 import { useAuthStore } from '@/store/authStore'
 
 export function MyPageModal() {
   const router = useRouter()
+  const pathname = usePathname()
+
   const { isOpen, closeModal } = useStatusModal({
     type: 'auth',
     mode: 'mypage',
   })
+
   const { user, clearAuth } = useAuthStore()
   const handleLocationClick = (location: string) => {
     closeModal()
-    router.push(`/${location}`)
+    router.push(`${pathname}?auth=${location}`)
   }
 
   const handleLogout = async () => {

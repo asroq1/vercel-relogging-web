@@ -5,6 +5,7 @@ import ReportModal from '../modal/ReportModal'
 import IcMoreIcon from '@/assets/icon_more.svg'
 import CommentInput from './CommentInput'
 import { ContentType } from './CommentSection'
+import { toast } from '@/hooks/use-toast'
 
 const CommentList = ({
   eventDetail,
@@ -131,13 +132,21 @@ const CommentItem = ({
       if (!response.ok) {
         throw new Error('신고에 실패했습니다.')
       }
-      alert('신고가 접수되었습니다.')
+
       setIsReportModalOpen(false)
+      toast({
+        title: '신고가 접수되었습니다.',
+        description: '신고가 정상적으로 접수되었습니다.',
+        variant: 'default',
+      })
     } catch (error) {
       console.error('신고 오류:', error)
-      alert(
-        '신고가 정상적으로 접수되지 않았습니다. \n문제가 반복해서 발생할 경우 관리자에게 문의해주세요.',
-      )
+      toast({
+        title: '신고가 정상적으로 접수되지 않았습니다.',
+        description:
+          '문제가 반복해서 발생할 경우 관리자에게 문의해주세요.',
+        variant: 'destructive',
+      })
     }
   }
 
@@ -166,6 +175,11 @@ const CommentItem = ({
       refetchEventDetail()
     } catch (error) {
       console.error('댓글 수정 오류:', error)
+      toast({
+        title: '댓글 수정에 실패했습니다.',
+        description: '문제가 반복해서 발생할 경우 관리자에게 문의해주세요.',
+        variant: 'destructive',
+      })
     }
   }
 
@@ -184,6 +198,11 @@ const CommentItem = ({
         return response.json()
       }
       if (response.status === 204) {
+        toast({
+          title: '댓글이 삭제되었습니다.',
+          description: '댓글이 정상적으로 삭제되었습니다.',
+          variant: 'default',
+        })
         refetchEventDetail()
         return
       }
@@ -191,6 +210,11 @@ const CommentItem = ({
       throw new Error(errorData.error || '댓글 삭제에 실패했습니다.')
     } catch (error) {
       console.error('댓글 삭제 오류:', error)
+      toast({
+        title: '댓글 삭제에 실패했습니다.',
+        description: '문제가 반복해서 발생할 경우 관리자에게 문의해주세요.',
+        variant: 'destructive',
+      })
     }
   }
 

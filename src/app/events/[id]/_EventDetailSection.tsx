@@ -35,7 +35,8 @@ function ImageListCarousel({ imageList }: IEventContentCarouselProps) {
                     alt="Plogging eventDetail main image"
                     width={1920}
                     height={1080}
-                    quality={100}
+                    priority
+                    quality={75}
                     className="h-auto w-full rounded-lg"
                   />
                 </CardContent>

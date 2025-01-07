@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
-export type ModalMode = 'login' | 'mypage' | 'profile'
+export type ModalMode = 'login' | 'mypage' | 'profile' | 'account'
 
 interface useStatusModalProps {
   type: string
@@ -14,7 +14,6 @@ export const useStatusModal = ({ type, mode }: useStatusModalProps) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-
   const currentMode = searchParams.get(type)
   const isOpen = currentMode === mode
 

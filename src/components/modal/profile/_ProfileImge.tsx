@@ -4,8 +4,10 @@ import { Label } from '@/components/ui/label'
 import Image from 'next/image'
 import React from 'react'
 import IconGarbage from '@/assets/icon_garbage.svg'
+import { User } from '@/store/authStore'
 
 interface ProfileImageProps {
+  userInfo: User | null
   isEditing: boolean
   previewUrl: string
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -14,11 +16,40 @@ interface ProfileImageProps {
 
 export const ProfileImage = React.memo(
   ({
+    userInfo,
     isEditing,
     previewUrl,
     onImageChange,
     onImageRemove,
   }: ProfileImageProps) => {
+    // const [previewUrl, setPreviewUrl] = useState<string>(user?.image || '')
+    // const [imageFile, setImageFile] = useState<File | null>(null)
+
+    // const handleImageChange = useCallback(
+    //   async (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = e.target.files?.[0]
+    //     if (file) {
+    //       try {
+    //         validateImage(file)
+    //         setImageFile(file)
+    //         const url = URL.createObjectURL(file)
+    //         setPreviewUrl(url)
+    //       } catch (error) {
+    //         alert(
+    //           (error as Error)?.message?.toString() ||
+    //             '이미지 업로드에 실패했습니다.',
+    //         )
+    //       }
+    //     }
+    //   },
+    //   [],
+    // )
+
+    // const handleImageRemove = useCallback(() => {
+    //   setImageFile(null)
+    //   setPreviewUrl(user?.image || '')
+    // }, [user?.image])
+
     return (
       <div className="space-y-2">
         <div className="flex items-center justify-between">
@@ -44,7 +75,7 @@ export const ProfileImage = React.memo(
 
           <div className="mx-auto h-32 w-32">
             <Image
-              src={previewUrl || '/defaultProfile.png'}
+              src={userInfo?.image || '/defaultProfile.png'}
               alt="Profile preview"
               className="h-full w-full rounded-full object-cover"
               width={100}

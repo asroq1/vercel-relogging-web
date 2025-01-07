@@ -12,27 +12,76 @@ export async function generateMetadata({
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/ploggingMeetups/${params.id}`,
   )
   const meetupDetail = await response.json()
+  const keywords = [
+    '플로깅',
+    meetupDetail.region,
+    '환경보호',
+    '러닝',
+    meetupDetail.title,
+    '플로깅모임',
+    meetupDetail.location,
+    meetupDetail.participantTarget,
+    '플로깅크루',
+    '환경운동',
+    '지역봉사',
+  ].filter(Boolean)
+  // 설명 텍스트 구성
+  const description = `
+   ${meetupDetail.region}에서 진행되는 플로깅 모임 "${meetupDetail.title}"
+   📍 활동장소: ${meetupDetail.location}
+   👥 참가대상: ${meetupDetail.participantTarget}
+   ⏰ 활동시간: ${meetupDetail.activityHours}
+   💝 지원내용: ${meetupDetail.supportDetails}
+ `.trim()
 
   return {
-    title: `리로깅 - ${meetupDetail.title ?? ''}`,
-    description: `리로깅 - ${meetupDetail.content ?? ''}`,
+    title: `${meetupDetail.title} | ${meetupDetail.region} 플로깅 모임 | 리로깅`,
+    description,
+    keywords,
     openGraph: {
-      title: `리로깅 - ${meetupDetail.title ?? ''}`,
-      description: `리로깅 - ${meetupDetail.content ?? ''}`,
+      title: `${meetupDetail.title} - ${meetupDetail.region} 플로깅 모임`,
+      description,
+      type: 'article',
+      url: `https://re-logging.com/meetup/${params.id}`,
       images: [
         {
           url: meetupDetail?.imageUrl ?? '',
-          width: 1200,
-          height: 630,
-          alt: '플로깅 모임 이미지',
+          width: 720,
+          height: 377,
+          alt: `${meetupDetail.region} ${meetupDetail.title} 플로깅 모임`,
         },
       ],
+      locale: 'ko_KR',
+      siteName: '리로깅',
     },
+
     twitter: {
       card: 'summary_large_image',
-      title: `리로깅 - ${meetupDetail.title ?? ''}`,
-      description: `리로깅 - ${meetupDetail.content ?? ''}`,
+      title: `${meetupDetail.title} | ${meetupDetail.region} 플로깅`,
+      description: `${meetupDetail.region} 플로깅 모임에 참여하세요!
+       📍 ${meetupDetail.location}
+       👥 ${meetupDetail.participantTarget}`,
       images: [meetupDetail?.imageUrl ?? ''],
+      creator: '@리로깅',
+      site: '@리로깅',
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      nocache: true,
+    },
+
+    other: {
+      'og:updated_time': meetupDetail.updatedAt,
+      'article:published_time': meetupDetail.createdAt,
+      'article:modified_time': meetupDetail.updatedAt,
+      'article:publisher': 'https://re-logging.com',
+      'article:category': '플로깅',
+      'article:region': meetupDetail.region,
     },
   }
 }

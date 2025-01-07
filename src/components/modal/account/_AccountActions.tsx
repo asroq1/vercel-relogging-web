@@ -48,11 +48,12 @@ AccountActions.displayName = 'AccountActions'
 // 수정 화면의 액션 버튼들
 interface EditAccountActionsProps extends AccountActionsBaseProps {
   onSubmit: () => void
+  onTypeChange: (type: 'main' | 'edit' | 'delete') => void
   isSubmitting: boolean
 }
 
 export const EditAccountActions = React.memo(
-  ({ onSubmit, onCancel, isSubmitting }: EditAccountActionsProps) => {
+  ({ onSubmit, onTypeChange, isSubmitting }: EditAccountActionsProps) => {
     return (
       <div className="space-y-2">
         <Button
@@ -65,7 +66,7 @@ export const EditAccountActions = React.memo(
         <Button
           className="h-[48px] w-full bg-solid text-white hover:bg-gray-300"
           variant="secondary"
-          onClick={onCancel}
+          onClick={() => onTypeChange('main')}
         >
           취소
         </Button>
@@ -80,10 +81,11 @@ EditAccountActions.displayName = 'EditAccountActions'
 interface DeleteAccountActionsProps extends AccountActionsBaseProps {
   onSubmit: () => void
   isSubmitting: boolean
+  onTypeChange: (type: string) => void
 }
 
 export const DeleteAccountActions = React.memo(
-  ({ onSubmit, onCancel, isSubmitting }: DeleteAccountActionsProps) => {
+  ({ onSubmit, isSubmitting, onTypeChange }: DeleteAccountActionsProps) => {
     return (
       <div className="space-y-2">
         <Button
@@ -96,7 +98,7 @@ export const DeleteAccountActions = React.memo(
         <Button
           className="h-[48px] w-full bg-solid text-white hover:bg-gray-300"
           variant="secondary"
-          onClick={onCancel}
+          onClick={() => onTypeChange('delete')}
         >
           취소
         </Button>

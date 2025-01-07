@@ -11,27 +11,75 @@ export async function generateMetadata({
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/ploggingEvents/${params.id.toString()}`,
   )
+
   const eventDetail = await response.json()
+
+  const keywords = [
+    '플로깅',
+    eventDetail.region,
+    '환경보호',
+    '러닝',
+    eventDetail.title,
+    '플로깅모임',
+    '환경운동',
+    '지역봉사',
+  ].filter(Boolean)
+
   return {
-    title: `리로깅 - ${eventDetail.title ?? ''} `,
-    description: `리로깅 - ${eventDetail.content ?? ''} `,
+    title: `${eventDetail.title} | ${eventDetail.region} 플로깅 모임 | 리로깅`,
+    description: `${eventDetail.region}에서 진행되는 플로깅 모임 "${eventDetail.title}" - ${eventDetail.content}`,
+    keywords: keywords,
+    // openGraph: {
+    //   title: `리로깅 - ${eventDetail.title ?? ''} `,
+    //   description: `리로깅 - ${eventDetail.content ?? ''} `,
+    //   images: [
+    //     {
+    //       url: eventDetail.imageList?.[0]?.url ?? '',
+    //       width: 1200,
+    //       height: 630,
+    //       alt: '플로깅 이벤트 이미지',
+    //     },
+    //   ],
+    // },
+
     openGraph: {
-      title: `리로깅 - ${eventDetail.title ?? ''} `,
-      description: `리로깅 - ${eventDetail.content ?? ''} `,
+      title: `${eventDetail.title} - ${eventDetail.region} 플로깅 모임`,
+      description: `${eventDetail.content}\n📍위치: ${eventDetail.location}\n 참가대상: ${eventDetail.participantTarget}`,
+      type: 'article', // 뉴스나 블로그 글처럼 취급
+      url: `https://re-logging.com/events/${params.id}`,
       images: [
         {
           url: eventDetail.imageList?.[0]?.url ?? '',
-          width: 1200,
-          height: 630,
-          alt: '플로깅 이벤트 이미지',
+          width: 720,
+          height: 377,
+          alt: `${eventDetail.region} ${eventDetail.title} 플로깅 모임 이미지`,
         },
       ],
+      locale: 'ko_KR', // 한국어 컨텐츠임을 명시
+      siteName: '리로깅',
     },
+
     twitter: {
-      card: 'summary_large_image',
-      title: `리로깅 - ${eventDetail.title ?? ''} `,
-      description: `리로깅 - ${eventDetail.content ?? ''} `,
+      card: 'summary_large_image', // 큰 이미지 카드 사용
+      title: `${eventDetail.title} | ${eventDetail.region} 플로깅`,
+      description: `${eventDetail.region}에서 진행되는 플로깅 모임에 참여하세요! 📍${eventDetail.location}`,
       images: eventDetail.imageList?.[0]?.url ?? '',
+    },
+    // 크롤릿 설정
+    robots: {
+      index: true, // 페이지 인덱싱 허용
+      follow: true, // 링크 따라가기 허용
+      'max-video-preview': -1, // 비디오 미리보기 제한 없음
+      'max-image-preview': 'large', // 큰 이미지 미리보기 허용
+      'max-snippet': -1, // 스니펫 길이 제한 없음
+    },
+
+    // 추가 메타데이터
+    other: {
+      'og:updated_time': eventDetail.updatedAt, // 마지막 수정 시간
+      'article:published_time': eventDetail.createdAt, // 최초 발행 시간
+      'article:modified_time': eventDetail.updatedAt, // 수정 시간
+      'article:publisher': 'https://re-logging.com', // 발행자 정보
     },
   }
 }

@@ -2,7 +2,7 @@ import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { User } from '@/store/authStore'
 import React from 'react'
-import { AccountFormField } from '@/app/@modal/(.)account/_AccountFormField'
+import { AccountFormField } from '@/components/modal/account/_AccountFormField'
 import { AccountActions } from './_AccountActions'
 
 interface MainAccountModalProps {

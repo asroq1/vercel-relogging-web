@@ -1,0 +1,32 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 메인 페이지 -->
+  <url>
+    <loc>https://re-logging.com</loc>
+    <lastmod>2024-01-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- 우리 동네 플로깅 목록 페이지 -->
+  <url>
+    <loc>https://www.re-logging.com/?tab=ploggingEvent</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 플로깅 모임 목록 페이지 -->
+  <url>
+    <loc>https://www.re-logging.com/?tab=meetup</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 뉴스 목록 페이지 -->
+  <url>
+    <loc>https://www.re-logging.com/?tab=news</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

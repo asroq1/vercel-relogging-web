@@ -10,12 +10,13 @@ import { EditAccountActions } from './_AccountActions'
 
 // components/account/modal/EditAccountModalContent.tsx
 interface EditAccountModalProps {
+  onTypeChange: (type: 'main' | 'edit' | 'delete') => void
   profileInfo: User
   onCancel: () => void
 }
 
 export const EditAccountModalContent = React.memo(
-  ({ profileInfo, onCancel }: EditAccountModalProps) => {
+  ({ profileInfo, onCancel, onTypeChange }: EditAccountModalProps) => {
     const [userInfo, setUserInfo] = useState<User>(profileInfo)
     const { updateAccount } = useUpdateAccount()
     const { toast } = useToast()
@@ -39,11 +40,12 @@ export const EditAccountModalContent = React.memo(
           name: userInfo.name,
         })
         toast({
-          title: '프로필 수정 완료',
-          description: '프로필이 성공적으로 수정되었습니다.',
+          title: '계정 정보 수정 완료',
+          description: '계정 정보가 수정되었습니다.',
           duration: 1500,
           variant: 'default',
         })
+
         onCancel()
       } catch (error) {
         toast({
@@ -74,8 +76,9 @@ export const EditAccountModalContent = React.memo(
           </AccountFormField>
           <EditAccountActions
             onSubmit={handleUpdateSubmit}
-            onCancel={onCancel}
+            onTypeChange={onTypeChange}
             isSubmitting={updateAccount.isPending}
+            onCancel={onCancel}
           />
         </div>
       </>
