@@ -68,7 +68,7 @@ export const ProfileForm = React.memo(
     }, [user?.image])
 
     return (
-      <DialogContent className="h-dvh w-full max-w-[560px] bg-white p-0 laptop:max-h-[689px]">
+      <DialogContent className="z-[10001] h-dvh w-full max-w-[560px] bg-white p-0 laptop:max-h-[689px]">
         <DialogHeader className="p-6 pb-2">
           <DialogTitle className="justify-center text-center font-semibold">
             {isEditing ? (

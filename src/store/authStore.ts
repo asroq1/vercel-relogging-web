@@ -15,32 +15,30 @@ interface AuthState {
   accessToken: string | null
   isAuthenticated: boolean
   isLoading: boolean
+  isInitialized: boolean
 }
 
 interface AuthStore extends AuthState {
   setAuth: (user: User) => void
   clearAuth: () => void
-  initializeAuth: () => void
+  initializeAuth: (hasToken: boolean) => void
 }
 
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
       // 초기 상태
-      user: null,
-      accessToken: null,
-      isAuthenticated: false,
-      isLoading: true,
+      user: null, // 사용자 정보
+      accessToken: null, // 토큰
+      isAuthenticated: false, // 인증 상태
+      isLoading: true, // 초기화 중
+      isInitialized: false, // 초기화 상태
 
-      initializeAuth: () => {
-        const cookies = document.cookie.split(';')
-        const hasToken = cookies.some((cookie) =>
-          cookie.trim().startsWith('accessToken='),
-        )
-
+      initializeAuth: (hasToken: boolean) => {
         set({
           isAuthenticated: hasToken,
-          isLoading: false,
+          isLoading: true,
+          isInitialized: true,
         })
       },
 

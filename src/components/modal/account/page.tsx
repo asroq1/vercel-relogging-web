@@ -53,7 +53,7 @@ const AccountModalContent = React.memo(
     }
 
     return (
-      <DialogContent className="h-dvh w-full max-w-[580px] bg-white laptop:max-h-[689px]">
+      <DialogContent className="z-[10001] h-dvh w-full max-w-[580px] bg-white laptop:max-h-[689px]">
         {renderContent()}
       </DialogContent>
     )

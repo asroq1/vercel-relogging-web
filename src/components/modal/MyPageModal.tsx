@@ -28,7 +28,6 @@ export function MyPageModal() {
   }
 
   return (
-    // <div className="">
     <CommonModal
       open={isOpen}
       onClose={handleLogout}
@@ -37,7 +36,7 @@ export function MyPageModal() {
       }}
       title={`${user?.name} 님`}
       closeButtonLabel="로그아웃"
-      className="flex h-dvh w-full flex-col justify-center bg-white tablet:max-h-[280px] tablet:max-w-[368px] laptop:max-h-[280px] laptop:max-w-[368px]"
+      className="z-[10000] flex h-dvh w-full flex-col justify-center bg-white tablet:max-h-[280px] tablet:max-w-[368px] laptop:max-h-[280px] laptop:max-w-[368px]"
       buttonClassName="border-none  justify-end text-base text-textStrong bg-white font-normal"
     >
       <button
@@ -53,6 +52,5 @@ export function MyPageModal() {
         <SettingIcon width={24} height={24} /> 계정 관리 및 수정
       </button>
     </CommonModal>
-    // </div>
   )
 }

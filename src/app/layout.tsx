@@ -8,6 +8,7 @@ import '@/styles/globals.css'
 import { cookies } from 'next/headers'
 import LoadingScreen from '@/components/layouts/LoadingScreen'
 import { Analytics } from '@vercel/analytics/react'
+import { AuthProvider } from '@/utils/AuthProvider'
 
 export const metadata: Metadata = {
   title: {
@@ -99,15 +100,17 @@ export default function RootLayout({
       <body suppressHydrationWarning className="bg-white">
         <Analytics />
         <Suspense fallback={<LoadingScreen />}>
-          <ReactQueryProviders>
-            <MswComponent />
-            <CommonLayout hasToken={hasToken}>
-              {children}
-              {modal}
-              <div id="portal-root"></div>
-              <Toaster />
-            </CommonLayout>
-          </ReactQueryProviders>
+          <AuthProvider hasToken={hasToken}>
+            <ReactQueryProviders>
+              <MswComponent />
+              <CommonLayout hasToken={hasToken}>
+                {children}
+                {modal}
+                <div id="portal-root"></div>
+                <Toaster />
+              </CommonLayout>
+            </ReactQueryProviders>
+          </AuthProvider>
         </Suspense>
       </body>
     </html>
