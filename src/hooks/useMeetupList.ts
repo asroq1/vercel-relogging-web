@@ -148,17 +148,17 @@ export const useMeetupQueries = ({
 
 interface IMeetupFormData {
   title: string
-  content: string
+  content?: string
   location: string
   region: string
   startDate?: string
   endDate?: string
-  participantTarget: string
-  activityHours: string
+  participantTarget?: string
+  activityHours?: string
   contactPerson: string
   contactNumber: string
-  registrationLink: string
-  supportDetails: string
+  registrationLink?: string
+  supportDetails?: string
   image?: File
 }
 

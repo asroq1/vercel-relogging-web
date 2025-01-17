@@ -46,18 +46,18 @@ import {
 const MeetupFormSchema = z
   .object({
     title: z.string().min(1, '모임 이름을 입력해주세요'),
-    content: z.string().min(1, '모임 소개를 입력해주세요'),
+    content: z.string().optional(),
     location: z.string().min(1, '활동 장소를 입력해주세요'),
     region: z.string().min(1, '지역을 선택해주세요'),
-    supportDetails: z.string().min(1, '지원 내용을 입력해주세요'),
+    supportDetails: z.string().optional(),
     startDate: z.date({
       required_error: '시작일을 선택해주세요',
     }),
     endDate: z.date({
       required_error: '종료일을 선택해주세요',
     }),
-    participantTarget: z.string().min(1, '모임원 자격을 입력해주세요'),
-    activityHours: z.string().min(1, '활동 시간을 입력해주세요'),
+    participantTarget: z.string().optional(),
+    activityHours: z.string().optional(),
     contactPerson: z.string().min(1, '담당자 이름을 입력해주세요'),
     contactNumber: z
       .string({
@@ -68,10 +68,11 @@ const MeetupFormSchema = z
         '올바른 전화번호 형식이 아닙니다 (예: 010-1234-5678)',
       ),
     registrationLink: z
-      .string({
-        required_error: '지원 링크를 입력해주세요',
-      })
-      .url('올바른 URL 형식이 아닙니다'),
+      .string()
+      .url('올바른 URL 형식이 아닙니다')
+      .optional()
+      // 또는 더 명확하게 빈 문자열 허용하고 싶다면
+      .or(z.literal('')),
     image: z.any().optional(),
   })
   .refine(
@@ -151,8 +152,6 @@ export default function MeetupFormModal() {
   }
 
   const handleSubmit = async (data: z.infer<typeof MeetupFormSchema>) => {
-    
-
     try {
       const formData = new FormData()
 
@@ -177,17 +176,17 @@ export default function MeetupFormModal() {
       await createMeetup.mutateAsync({
         request: {
           title: data.title,
-          content: data.content,
+          content: data.content ?? '',
           location: data.location,
           region: data.region,
-          supportDetails: data.supportDetails,
+          supportDetails: data.supportDetails ?? '',
           startDate: data.startDate.toISOString(),
           endDate: data.endDate.toISOString(),
-          participantTarget: data.participantTarget,
-          activityHours: data.activityHours,
+          participantTarget: data.participantTarget ?? '',
+          activityHours: data.activityHours ?? '',
           contactPerson: data.contactPerson,
           contactNumber: data.contactNumber,
-          registrationLink: data.registrationLink,
+          registrationLink: data.registrationLink ?? '',
         },
         image: imageFile || null,
       })
@@ -203,7 +202,7 @@ export default function MeetupFormModal() {
         if (!open) router.back()
       }}
     >
-      <DialogContent className="mx-auto flex h-[100dvh] max-w-[800px] flex-col overflow-hidden overflow-y-auto bg-white p-0 laptop:h-auto laptop:max-h-[689px]">
+      <DialogContent className="z-[10002] mx-auto flex h-[100dvh] max-w-[800px] flex-col overflow-hidden overflow-y-auto bg-white p-0 tablet:h-auto tablet:max-h-[689px] laptop:h-auto laptop:max-h-[689px]">
         <DialogHeader className="w-full items-center p-6 pb-2">
           <DialogTitle className="text-lg font-semibold">
             플로깅 모임 만들기
@@ -240,10 +239,7 @@ export default function MeetupFormModal() {
                 </div>
                 <div className="space-y-2">
                   {/* 모임소개 및 활동목적 필드 */}
-                  <FormLabel>
-                    모임 소개 및 활동 목적
-                    <span className="text-green">*</span>
-                  </FormLabel>
+                  <FormLabel>모임소개 및 활동 목적</FormLabel>
                   <FormField
                     control={form.control}
                     name="content"
@@ -261,9 +257,28 @@ export default function MeetupFormModal() {
                   />
                 </div>
                 <div className="space-y-2">
+                  {/* 모임원 자격 필드 */}
+                  <FormLabel>모임원 자격</FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="participantTarget"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="예: 환경 이슈에 관심이 많은 30대"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
                   {/* 지역 필드 */}
                   <FormLabel>
-                    지역 <span className="text-green">*</span>
+                    활동 지역 <span className="text-green">*</span>
                   </FormLabel>
                   <FormField
                     control={form.control}
@@ -279,7 +294,7 @@ export default function MeetupFormModal() {
                               <SelectValue placeholder="지역을 선택해주세요" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="z-[424242]">
                             <SelectItem value="전체">
                               지역 미지정 (전체)
                             </SelectItem>
@@ -317,27 +332,6 @@ export default function MeetupFormModal() {
                             <SelectItem value="강원도">강원도</SelectItem>
                           </SelectContent>
                         </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="space-y-2">
-                  {/* 지원 내용 필드 */}
-                  <FormLabel>
-                    지원 내용 <span className="text-green">*</span>
-                  </FormLabel>
-                  <FormField
-                    control={form.control}
-                    name="supportDetails"
-                    render={({ field }) => (
-                      <FormItem className="w-full space-y-1">
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="예: 지원 내용을 적어주세요."
-                          />
-                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -386,7 +380,7 @@ export default function MeetupFormModal() {
                                 </Button>
                               </FormControl>
                             </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
+                            <PopoverContent className="z-[424242] w-auto p-0">
                               <Calendar
                                 mode="single"
                                 selected={field.value}
@@ -435,33 +429,8 @@ export default function MeetupFormModal() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  {/* 모임원 자격 필드 */}
-                  <FormLabel>
-                    모임원 자격
-                    <span className="text-green">*</span>
-                  </FormLabel>
-                  <FormField
-                    control={form.control}
-                    name="participantTarget"
-                    render={({ field }) => (
-                      <FormItem className="w-full space-y-1">
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="예: 환경 이슈에 관심이 많은 30대"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="space-y-2">
                   {/* 활동시간 필드 */}
-                  <FormLabel>
-                    활동 시간
-                    <span className="text-green">*</span>
-                  </FormLabel>
+                  <FormLabel>활동 시간</FormLabel>
                   <FormField
                     control={form.control}
                     name="activityHours"
@@ -524,10 +493,7 @@ export default function MeetupFormModal() {
                 </div>
                 <div className="space-y-2">
                   {/* 지원링크 필드 */}
-                  <FormLabel>
-                    지원 링크
-                    <span className="text-green">*</span>
-                  </FormLabel>
+                  <FormLabel>지원 링크</FormLabel>
                   <FormField
                     control={form.control}
                     name="registrationLink"
@@ -537,6 +503,25 @@ export default function MeetupFormModal() {
                           <Input
                             {...field}
                             placeholder="지원받을 채널의 링크를 붙여넣어주세요. "
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/* 지원 내용 필드 */}
+                  <FormLabel>지원 내용</FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="supportDetails"
+                    render={({ field }) => (
+                      <FormItem className="w-full space-y-1">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="예: 지원 내용을 적어주세요."
                           />
                         </FormControl>
                         <FormMessage />
