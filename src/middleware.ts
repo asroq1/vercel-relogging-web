@@ -1,8 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('accessToken')
+  // API 요청 처리
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    const accessToken = request.cookies.get('access_token')?.value
 
+    // API 인증이 필요한 엔드포인트 처리
+    if (request.nextUrl.pathname.startsWith('/api/notifications')) {
+      if (!accessToken) {
+        return new NextResponse(
+          JSON.stringify({ message: 'Authentication required!' }),
+          { status: 401 },
+        )
+      }
+
+      const response = NextResponse.next()
+      response.headers.set('Authorization', `Bearer ${accessToken}`)
+      // CORS 헤더 추가
+      response.headers.set('Access-Control-Allow-Credentials', 'true')
+      response.headers.set('Access-Control-Allow-Headers', 'Authorization')
+
+      return response
+    }
+  }
+
+  // 기존 페이지 라우팅 처리
+  const token = request.cookies.get('accessToken')?.value
   // 현재 URL에서 auth 쿼리 파라미터 확인
   const authParam = request.nextUrl.searchParams.get('auth')
 
@@ -28,5 +51,9 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   // ONLY auth 쿼리 파라미터가 있는 요청만 매칭
-  matcher: ['/', '/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/',
+    '/api/:path*',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
 }

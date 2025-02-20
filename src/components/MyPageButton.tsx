@@ -5,6 +5,7 @@ import { useStatusModal } from '@/hooks/useStatusModal'
 import { useAuthStore } from '@/store/authStore'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { NotificationBell } from './NotificationBell'
 
 export default function MyPageButton() {
   const router = useRouter()
@@ -28,7 +29,9 @@ export default function MyPageButton() {
     router.push('/')
   }
   return (
-    <>
+    <div>
+      <NotificationBell />
+
       <Button
         onClick={openModal}
         className="rounded-md bg-white px-3 py-2 text-sm font-medium text-text"
@@ -41,6 +44,6 @@ export default function MyPageButton() {
       >
         로그아웃
       </Button>
-    </>
+    </div>
   )
 }

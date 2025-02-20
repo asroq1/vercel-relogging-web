@@ -3,19 +3,21 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
 export async function fetchEventsArticle(
-  page: number,
-  pageSize: number,
-  region?: string,
-  progressStatus = false,
-  sortBy = 'START_DATE',
-  sortDirection = 'DESC',
+  page: number, // 현재 페이지
+  pageSize: number, // 페이지 당 아이템 수
+  region?: string, // 지역 선택
+  progressStatus = false, // 기본값은 전체
+  sortBy = 'START_DATE', // 기본값은 시작일
+  sortDirection = 'DESC', // 기본값은 최신순
 ) {
+  const finalSortDirection = sortBy === 'END_DATE' ? 'ASC' : sortDirection
+
   const params = new URLSearchParams({
     page: page.toString(),
     pageSize: pageSize.toString(),
     isOpen: progressStatus.toString(),
     sortBy,
-    sortDirection,
+    sortDirection: finalSortDirection,
     ...(region && { region }), // region이 있을 때만 추가
   })
 

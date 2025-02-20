@@ -40,9 +40,7 @@ export function CommonLayout({
               <MobileNav />
             </div> */}
       </nav>
-
       <LayoutModalContainer />
-
       <main>{children}</main>
       {/* <footer>푸터</footer> */}
     </>
